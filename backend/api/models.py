@@ -1,68 +1,54 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.utils import timezone
+from django.db import models
 
-# Create your models here.
 class CustomUserManager(BaseUserManager):
-    def _create_user(self, email, password, **extra_fields):
+    def create_user(self, email, name, password=None):
         if not email:
-            raise ValueError("You have not provided a valid email")
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            name=name,
+        )
+
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
-
-    def create_superuser(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self._create_user(email, password, **extra_fields)
+    def create_superuser(self, email, name, password):
+        user = self.create_user(
+            email,
+            password=password,
+            name=name,
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(blank=True, default="", unique=True)
-    name = models.CharField(max_length=255, blank=True, default="")
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    name = models.CharField(max_length=30)
     is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(default=timezone.now)
-    last_login = models.DateTimeField(blank=True, null=True)
+    is_admin = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['name']
 
-    # Add custom related_name to the groups and user_permissions fields
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name='user_groups',  # Custom related_name
-        related_query_name='user',
-    )
-    
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='user permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        related_name='user_permissions',  # Custom related_name
-        related_query_name='user',
-    )
+    def __str__(self):
+        return self.email
 
-    class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+    def has_perm(self, perm, obj=None):
+        return True
 
-    def get_full_name(self):
-        return self.name
+    def has_module_perms(self, app_label):
+        return True
 
-    def get_short_name(self):
-        return self.name or self.email.split('@')[0]
+    @property
+    def is_staff(self):
+        return self.is_admin

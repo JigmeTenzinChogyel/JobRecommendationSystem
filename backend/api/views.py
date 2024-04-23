@@ -3,6 +3,10 @@ from .models import User, Resume
 from rest_framework import generics
 from .serializers import UserSerializer, ResumeSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.conf import settings
+from api.utils.extract import read_pdf
+from api.machine.preprocess import preprocess_text
+from api.machine.ner import process
 
 # User
 class CreateUserView(generics.CreateAPIView):
@@ -35,3 +39,9 @@ class ResumeDeleteAPIView(generics.DestroyAPIView):
     queryset = Resume.objects.all()
     serializer_class = ResumeSerializer
     permission_classes = [IsAuthenticated]
+
+
+text= read_pdf("C:/Users/kinle/Documents/Git Hub/JobRecommendationSystem/backend/media/resumes/cv-template.pdf")
+res = preprocess_text(text)
+skill = process(res)
+print(skill)

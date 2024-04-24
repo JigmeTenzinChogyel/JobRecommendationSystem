@@ -8,7 +8,7 @@ function Home() {
     const fetch = async () => {
         try {
             // const response = await api.get('/api/resumes/create/');
-            const response = await api.get('/api/jobs/create/');
+            const response = await api.get('/api/jobs/');
             console.log(response.data);
           } catch (error) {
             console.error(error);

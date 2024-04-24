@@ -70,3 +70,20 @@ class Resume(models.Model):
 
     def __str__(self):
         return f"{self.user.name}'s Resume"
+    
+class Job(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jobs')
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    location = models.CharField(max_length=200)
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    qualification = ArrayField(models.CharField(max_length=200), blank=True)
+    experience = ArrayField(models.TextField(), blank=True)
+    skills = ArrayField(models.CharField(max_length=200), blank=True)
+    deadline = models.DateField()
+    job_file = models.FileField(upload_to='job/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Resume
+from .models import User, Resume, Job
 from django.contrib.postgres import fields as postgres_fields
 
 class CustomUserAdmin(UserAdmin):
@@ -40,3 +40,10 @@ class ResumeAdmin(admin.ModelAdmin):
     }
 
 admin.site.register(Resume, ResumeAdmin)
+
+class JobAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'location', 'salary', 'deadline', 'created_at', 'updated_at')
+    list_filter = ('location',)
+    search_fields = ('title', 'description')
+
+admin.site.register(Job, JobAdmin)

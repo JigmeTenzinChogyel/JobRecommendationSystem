@@ -53,7 +53,6 @@ const ResumeForm = () => {
       const response = await api.post("/api/resumes/create/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        //   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzODcwNjkwLCJpYXQiOjE3MTM4Njg4OTAsImp0aSI6ImI1ZGU4ZjIwNDdiZTRhZTVhYWE2YWUwZWZmZGI3OTY4IiwidXNlcl9pZCI6Mn0.3zFhMIvwHoRNK55svcCzzVNbYWKrpCkrKz1wyYn-YgU"
         },
       });
       console.log(response.data);

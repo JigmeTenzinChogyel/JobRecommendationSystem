@@ -1,4 +1,4 @@
-from .models import User, Resume
+from .models import User, Resume, Job
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,5 +24,13 @@ class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resume
         fields = ['id', 'user', 'skills', 'experience', 'qualification',  'resume_file', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+        extra_kwargs = {"user": {"read_only": True}}
+
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ['id', 'user', 'title', 'description', 'location', 'salary', 'qualification', 'experience', 'skills', 'deadline', 'job_file', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}}

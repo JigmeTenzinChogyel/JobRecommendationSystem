@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Resume
+from .models import User, Resume, Job
 from django.contrib.postgres import fields as postgres_fields
 
 class CustomUserAdmin(UserAdmin):
@@ -32,11 +32,18 @@ class ResumeAdmin(admin.ModelAdmin):
     list_display = ('user', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
 
-    formfield_overrides = {
-        postgres_fields.ArrayField: {'widget': admin.widgets.FilteredSelectMultiple(
-            verbose_name='Items',
-            is_stacked=False
-        )},
-    }
+    # formfield_overrides = {
+    #     postgres_fields.ArrayField: {'widget': admin.widgets.FilteredSelectMultiple(
+    #         verbose_name='Items',
+    #         is_stacked=False
+    #     )},
+    # }
 
 admin.site.register(Resume, ResumeAdmin)
+
+class JobAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'location', 'salary', 'deadline', 'created_at', 'updated_at')
+    list_filter = ('location',)
+    search_fields = ('title', 'description')
+
+admin.site.register(Job, JobAdmin)

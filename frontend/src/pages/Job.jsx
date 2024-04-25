@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 
-function Profile() {
-  const [resume, setResume] = useState(null);
+function Job() {
+  const [job, setJob] = useState(null);
   const [newSkill, setNewSkill] = useState("");
   const [newQualification, setNewQualification] = useState("");
   const [newExperience, setNewExperience] = useState("");
@@ -13,10 +13,10 @@ function Profile() {
 
   const fetch = async () => {
     try {
-      const response = await api.get("/api/resumes/me");
+      const response = await api.get("/api/jobs/8/");
       console.log(response.data);
       if (response.data) {
-        setResume(response.data);
+        setJob(response.data);
       }
     } catch (err) {
       console.error(err);
@@ -24,18 +24,18 @@ function Profile() {
   };
 
   const handleChipDelete = (type, value) => {
-    setResume((prevResume) => {
-      const updatedResume = { ...prevResume };
-      updatedResume[type] = updatedResume[type].filter((item) => item !== value);
-      return updatedResume;
+    setJob((prevJob) => {
+      const updatedJob = { ...prevJob };
+      updatedJob[type] = updatedJob[type].filter((item) => item !== value);
+      return updatedJob;
     });
   };
 
   const handleAddItem = (type, value) => {
-    setResume((prevResume) => {
-      const updatedResume = { ...prevResume };
-      updatedResume[type] = [...updatedResume[type], value];
-      return updatedResume;
+    setJob((prevJob) => {
+      const updatedJob = { ...prevJob };
+      updatedJob[type] = [...updatedJob[type], value];
+      return updatedJob;
     });
     resetInputs(type);
   };
@@ -52,17 +52,17 @@ function Profile() {
 
   const handleConfirm = async () => {
     // Handle confirm logic here
-    console.log("Confirmed resume:", resume);
+    console.log("Confirmed job:", job);
   
     try {
-      // Patch request with resume data
-      const response = await api.patch(`/api/resumes/${resume.id}/update/`, resume);
+      // Patch request with job data
+      const response = await api.patch(`/api/jobs/${job.id}/update/`, job);
   
       // Handle successful response
       console.log(response.data);
       if (response.data) {
-        // Update local state with updated resume
-        setResume(response.data);
+        // Update local state with updated job
+        setJob(response.data);
       }
     } catch (err) {
       // Handle error
@@ -73,11 +73,11 @@ function Profile() {
 
   return (
     <div>
-      {resume && (
+      {job && (
         <div>
           <h2 className="text-2xl font-bold my-4">Skills</h2>
           <div className="flex flex-wrap gap-2 mb-4">
-            {resume.skills.map((skill) => (
+            {job.skills.map((skill) => (
               <div
                 key={skill}
                 className="badge badge-primary gap-2 cursor-pointer"
@@ -120,7 +120,7 @@ function Profile() {
 
           <h2 className="text-2xl font-bold my-4">Qualifications</h2>
           <div className="flex flex-wrap gap-2 mb-4">
-            {resume.qualification.map((qualification) => (
+            {job.qualification.map((qualification) => (
               <div
                 key={qualification}
                 className="badge badge-primary gap-2 cursor-pointer"
@@ -163,7 +163,7 @@ function Profile() {
 
           <h2 className="text-2xl font-bold my-4">Experience</h2>
           <div className="flex flex-wrap gap-2 mb-4">
-            {resume.experience.map((experience) => (
+            {job.experience.map((experience) => (
               <div
                 key={experience}
                 className="badge badge-primary gap-2 cursor-pointer"
@@ -213,4 +213,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Job;

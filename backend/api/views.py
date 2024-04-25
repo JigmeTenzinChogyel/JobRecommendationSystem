@@ -82,28 +82,27 @@ class ResumeUpdateView(generics.UpdateAPIView):
 #     permission_classes = [IsAuthenticated]
 
 # Jobs
-class JobCreateAPIView(generics.ListCreateAPIView):
+class JobRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Job.objects.filter(user=user)
+class JobCreateView(generics.CreateAPIView):
+    serializer_class = JobSerializer
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        jobs = self.get_queryset()
-        serializer = self.get_serializer(jobs, many=True)
-        return Response(serializer.data)
-    
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def perform_create(self, serializer):
+        job = serializer.save(user=self.request.user)
+        skills, experience, qualifications = ['Python', 'Django', 'React'], ['Software Developer at Company A (2018-2021)', 'Intern at Company B (2017)'], ['Bachelor of Science in Computer Science']
+        job.skills = skills
+        job.experience = experience
+        job.qualification = qualifications
+        job.save()
 
-        if serializer.is_valid():
-            serializer.save(user=self.request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            logger.error(f"Serializer errors: {serializer.errors}")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
 
 class JobUpdateAPIView(generics.UpdateAPIView):
     queryset = Job.objects.all()

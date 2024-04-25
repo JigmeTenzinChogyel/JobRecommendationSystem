@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import { UserProvider } from "./components/provider/UserProvider";
 import Profile from "./pages/Profile";
+import Job from "./pages/Job";
 
 function Logout() {
   localStorage.clear();
@@ -37,6 +38,16 @@ function App() {
             <ProtectedRoute>
               <UserProvider>
                 <Profile />
+              </UserProvider>
+            </ProtectedRoute>
+            } 
+          />
+        <Route 
+          path="/job" 
+          element={
+            <ProtectedRoute>
+              <UserProvider>
+                <Job />
               </UserProvider>
             </ProtectedRoute>
             } 

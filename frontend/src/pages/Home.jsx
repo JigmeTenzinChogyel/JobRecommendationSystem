@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../components/provider/UserProvider";
 import api from "../api";
+import JobForm from "../components/forms/JobForm";
 
 function Home() {
   const { user } = useContext(UserContext);
@@ -39,9 +40,7 @@ function Home() {
           <button onClick={handleFileUpload}>Upload File</button>
         </div>
       ) : (
-        <div>
-          <h1>Post job</h1>
-        </div>
+        <JobForm />
       )}
     </div>
   );

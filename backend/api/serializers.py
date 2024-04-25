@@ -23,10 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
 # Resume
 class ResumeSerializer(serializers.ModelSerializer):
     
-    # skills = serializers.ListField(child=serializers.CharField())
-    # experience = serializers.ListField(child=serializers.CharField())
-    # qualification = serializers.ListField(child=serializers.CharField())
-
     class Meta:
         model = Resume
         fields = ['id', 'user', 'skills', 'experience', 'qualification', 'resume_file', 'created_at', 'updated_at']

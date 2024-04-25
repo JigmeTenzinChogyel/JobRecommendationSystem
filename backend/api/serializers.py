@@ -20,13 +20,32 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
     
+# Resume
 class ResumeSerializer(serializers.ModelSerializer):
+    
+    # skills = serializers.ListField(child=serializers.CharField())
+    # experience = serializers.ListField(child=serializers.CharField())
+    # qualification = serializers.ListField(child=serializers.CharField())
+
     class Meta:
         model = Resume
-        fields = ['id', 'user', 'skills', 'experience', 'qualification',  'resume_file', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'skills', 'experience', 'qualification', 'resume_file', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}}
 
+class ResumeCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resume
+        fields = ['id', 'user', 'resume_file', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+        extra_kwargs = {"user": {"read_only": True}}
+
+class ResumeUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resume
+        fields = ['id', 'user', 'skills', 'experience', 'qualification', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+        extra_kwargs = {"user": {"read_only": True}}
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:

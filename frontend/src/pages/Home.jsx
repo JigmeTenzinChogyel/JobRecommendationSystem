@@ -1,29 +1,50 @@
-import { useEffect, useState } from "react";
-import ResumeForm from "../components/ResumeForm";
+import { useContext, useState } from "react";
+import { UserContext } from "../components/provider/UserProvider";
 import api from "../api";
-import JobForm from "../components/JobForm";
 
 function Home() {
-    const [ data, setData ] = useState();
-    const fetch = async () => {
-        try {
-            // const response = await api.get('/api/resumes/create/');
-            const response = await api.get('/api/jobs/create/');
-            console.log(response.data);
-          } catch (error) {
-            console.error(error);
-          }
-    }
-    useEffect(() => {
-        fetch()
-    }, [])
-    return (
+  const { user } = useContext(UserContext);
+  const [file, setFile] = useState(null);
+
+  if (!user) {
+    return <div>Initializing...</div>;
+  }
+
+  const { user_type } = user;
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleFileUpload = async () => {
+    // Handle file upload logic here
+    console.log("Uploaded file:", file);
+    try {
+        const response = await api.post("/api/resumes/create/", {"resume_file": file}, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+  };
+
+  return (
+    <div>
+      {user_type === "seeker" ? (
         <div>
-            <p className="text-3xl font-bold underline">Hello world!</p>
-            {/* <ResumeForm /> */}
-            <JobForm />
+          <input type="file" onChange={handleFileChange} />
+          <button onClick={handleFileUpload}>Upload File</button>
         </div>
-    )
+      ) : (
+        <div>
+          <h1>Post job</h1>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Home;

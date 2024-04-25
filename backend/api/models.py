@@ -61,9 +61,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 class Resume(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='resume')
-    skills = ArrayField(models.CharField(max_length=200), blank=True)
-    experience = ArrayField(models.TextField(), blank=True)
-    qualification = ArrayField(models.CharField(max_length=200), blank=True)
+    experience = ArrayField(models.TextField(), null=True, blank=True)
+    skills = ArrayField(models.CharField(max_length=200), null=True, blank=True)
+    qualification = ArrayField(models.CharField(max_length=200), null=True, blank=True)
     resume_file = models.FileField(upload_to='resumes/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

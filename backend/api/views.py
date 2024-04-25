@@ -2,7 +2,13 @@ from django.shortcuts import render
 from .models import User, Resume, Job
 from rest_framework.response import Response
 from rest_framework import generics, status
-from .serializers import UserSerializer, ResumeSerializer, JobSerializer
+from .serializers import (
+    UserSerializer, 
+    ResumeUpdateSerializer,
+    ResumeSerializer,
+    ResumeCreateSerializer,
+    JobSerializer,
+)
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import logging
 
@@ -14,47 +20,52 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-# Resume
-class ResumeCreateAPIView(generics.CreateAPIView, generics.RetrieveUpdateAPIView):
-    serializer_class = ResumeSerializer
+class UserDetailView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# Resume
+
+class ResumeView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ResumeSerializer
 
     def get_object(self):
         try:
-            return Resume.objects.get(user=self.request.user)
+            return self.request.user.resume
         except Resume.DoesNotExist:
             return None
 
-    def get(self, request, *args, **kwargs):
-        resume = self.get_object()
-        if resume:
-            serializer = self.get_serializer(resume)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def post(self, request, *args, **kwargs):
-        resume = self.get_object()
-        if resume:
-            serializer = self.get_serializer(resume, data=request.data, partial=True)
-        else:
-            serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save(user=self.request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ResumeUpdateAPIView(generics.UpdateAPIView):
-    queryset = Resume.objects.all()
+class ResumeCreateView(generics.CreateAPIView):
     serializer_class = ResumeSerializer
     permission_classes = [IsAuthenticated]
 
-class ResumeDeleteAPIView(generics.DestroyAPIView):
+    def perform_create(self, serializer):
+        resume = serializer.save(user=self.request.user)
+        skills, experience, qualifications = ['Python', 'Django', 'React'], ['Software Developer at Company A (2018-2021)', 'Intern at Company B (2017)'], ['Bachelor of Science in Computer Science']
+        resume.skills = skills
+        resume.experience = experience
+        resume.qualification = qualifications
+        resume.save()
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
+
+class ResumeUpdateView(generics.UpdateAPIView):
     queryset = Resume.objects.all()
-    serializer_class = ResumeSerializer
+    serializer_class = ResumeUpdateSerializer
     permission_classes = [IsAuthenticated]
+
+# class ResumeDeleteAPIView(generics.DestroyAPIView):
+#     queryset = Resume.objects.all()
+#     serializer_class = ResumeSerializer
+#     permission_classes = [IsAuthenticated]
 
 # Jobs
 class JobCreateAPIView(generics.ListCreateAPIView):
@@ -72,7 +83,7 @@ class JobCreateAPIView(generics.ListCreateAPIView):
     
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-    
+
         if serializer.is_valid():
             serializer.save(user=self.request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)

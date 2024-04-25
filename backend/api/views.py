@@ -60,7 +60,6 @@ class ResumeCreateView(generics.CreateAPIView):
         extract = read_pdf(f"{resume.resume_file.path}")
         preprocessed = preprocess_text(extract)
         skills, experience, qualifications = process(preprocessed)
-        # skills, experience, qualifications = ['Python', 'Django', 'React'], ['Software Developer at Company A (2018-2021)', 'Intern at Company B (2017)'], ['Bachelor of Science in Computer Science']
         resume.skills = skills
         resume.experience = experience
         resume.qualification = qualifications
@@ -93,7 +92,15 @@ class JobCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         job = serializer.save(user=self.request.user)
-        skills, experience, qualifications = ['Python', 'Django', 'React'], ['Software Developer at Company A (2018-2021)', 'Intern at Company B (2017)'], ['Bachelor of Science in Computer Science']
+        file_path = job.job_file.path
+        logger.info(f"file path: {file_path}")
+        if file_path:
+            extract = read_pdf(f"{job.job_file.path}")
+            preprocessed = preprocess_text(extract + job.description)
+            skills, experience, qualifications = process(preprocessed)
+        else:
+            preprocessed = preprocess_text(job.description)
+            skills, experience, qualifications = process(preprocessed)
         job.skills = skills
         job.experience = experience
         job.qualification = qualifications

@@ -13,7 +13,7 @@ function Job() {
 
   const fetch = async () => {
     try {
-      const response = await api.get("/api/jobs/8/");
+      const response = await api.get("/api/jobs/9/");
       console.log(response.data);
       if (response.data) {
         setJob(response.data);
@@ -56,7 +56,11 @@ function Job() {
   
     try {
       // Patch request with job data
-      const response = await api.patch(`/api/jobs/${job.id}/update/`, job);
+      const response = await api.patch(`/api/jobs/${job.id}/update/`, {
+        skills: job.skills,
+        qualification: job.qualification,
+        experience: job.experience,
+      });
   
       // Handle successful response
       console.log(response.data);

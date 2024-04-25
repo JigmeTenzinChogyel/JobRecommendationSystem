@@ -8,14 +8,14 @@ const JobForm = () => {
         location: '',
         salary: '',
         deadline: '',
-        jobFile: null,
+        job_file: null,
     });
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: name === 'jobFile' ? files[0] : value,
+            [name]: name === 'job_file' ? files[0] : value,
         }));
     };
 
@@ -112,7 +112,7 @@ const JobForm = () => {
                 <input
                     type="file"
                     className="file-input file-input-bordered w-full"
-                    name="jobFile"
+                    name="job_file"
                     onChange={handleChange}
                 />
             </div>

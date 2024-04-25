@@ -16,6 +16,7 @@ const JobForm = () => {
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleLocationChange = (e) => setLocation(e.target.value);
   const handleSalaryChange = (e) => setSalary(e.target.value);
+  
   const handleQualificationChange = (e, index) => {
     const newQualification = [...qualification];
     newQualification[index] = e.target.value;

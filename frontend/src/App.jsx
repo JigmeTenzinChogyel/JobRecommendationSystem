@@ -1,9 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/hoc/ProtectedRoute";
+import { UserProvider } from "./components/provider/UserProvider";
+import Profile from "./pages/Profile";
 
 function Logout() {
   localStorage.clear();
@@ -23,10 +25,22 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <UserProvider>
+                <Home />
+              </UserProvider>
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <UserProvider>
+                <Profile />
+              </UserProvider>
+            </ProtectedRoute>
+            } 
+          />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="register" element={<RegisterAndLogout />} />

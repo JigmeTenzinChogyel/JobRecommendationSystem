@@ -7,7 +7,8 @@ from .views import (
     JobCreateView,
     JobRetrieveAPIView, 
     JobUpdateAPIView, 
-    JobDeleteAPIView
+    JobDeleteAPIView,
+    JobRecommendationView
 )
 
 urlpatterns = [
@@ -23,6 +24,6 @@ urlpatterns = [
     path('jobs/create/', JobCreateView.as_view(), name='job-create'),
     path('jobs/<int:pk>/update/', JobUpdateAPIView.as_view(), name='job-update'),
     path('jobs/<int:pk>/delete/', JobDeleteAPIView.as_view(), name='job-delete'),
-    # path('jobs/', JobListView.as_view(), name='job-list'),
+    path('jobs/', JobRecommendationView.as_view(), name='job-list'),
 
 ]

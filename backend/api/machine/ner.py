@@ -3,7 +3,7 @@ import spacy
 
 def process(text):
     
-    nlp = spacy.load("C:/Users/kinle/Documents/Git Hub/JobRecommendationSystem/backend/model-best")
+    nlp = spacy.load("/home/jigme/Documents/FYP/web/backend/model-best")
     doc = nlp(text)
     skills, experience, qualifications = [], [], []
 

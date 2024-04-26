@@ -121,40 +121,40 @@ class JobDeleteAPIView(generics.DestroyAPIView):
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
 
-class JobListView(generics.ListAPIView):
-    serializer_class = JobSerializer
+class JobRecommendationView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = JobSerializer
 
     def get_queryset(self):
         user = self.request.user
-        logger.info(f"user: {user}")
-        resume = Resume.objects.filter(user=user).first()
-        if resume:
-            skills = resume.skills[0]
-            experience = resume.experience
-            qualification = resume.qualification
-        logger.info(f"skill {skills}")
+        resume_text = self.get_resume_text(user)
+        jobs = Job.objects.all()
+        recommended_jobs = self.recommend_jobs(resume_text, jobs)
+        return recommended_jobs
+
+    def get_resume_text(self, user):
+        resume = Resume.objects.get(user=user)
+        skills = ' '.join(resume.skills)
+        experience = ' '.join(resume.experience)
+        qualification = ' '.join(resume.qualification)
+        resume_text = ' '.join([skills, experience, qualification])
+        return resume_text
+
+    def recommend_jobs(self, resume_text, jobs):
+        job_texts = []
+        for job in jobs:
+            skills = ' '.join(job.skills)
+            experience = ' '.join(job.experience)
+            qualification = ' '.join(job.qualification)
+            job_text = ' '.join([skills, experience, qualification])
+            job_texts.append(job_text)
+
         vectorizer = CountVectorizer()
-        resume_vector = vectorizer.fit_transform(["python", "java"])
-        logger.info(f"vector: {resume_vector}")
+        job_vectors = vectorizer.fit_transform(job_texts)
+        resume_vector = vectorizer.transform([resume_text])
 
-        # text= read_pdf(f"C:/Users/kinle/Documents/Git Hub/JobRecommendationSystem/backend/media/{resume.resume_file}")
-        # res = preprocess_text(text)
-        # skill = process(res)
-        # print(skill)
-        queryset = Job.objects.all()
-        logger.info(queryset)
-        job_vector = vectorizer.fit_transform(["c++", "javascript", "SQL"])
-        cosine_sim = cosine_similarity(resume_vector, job_vector)
-        logger.info(f"cosine_sim: {cosine_sim}")
-
-
-        # logger.info(queryset)
-        # You can apply additional filters or logic here based on the user's resume
-        return queryset
-
-
-# text= read_pdf("C:/Users/kinle/Documents/Git Hub/JobRecommendationSystem/backend/media/resumes/cv-template.pdf")
-# res = preprocess_text(text)
-# skill = process(res)
-# print(skill)
+        similarities = cosine_similarity(resume_vector, job_vectors)
+        job_indices = similarities.argsort()[0][::-1]
+        job_indices = job_indices.tolist()  # Convert numpy.int64 to regular Python integers
+        recommended_jobs = [jobs[index] for index in job_indices]
+        return recommended_jobs

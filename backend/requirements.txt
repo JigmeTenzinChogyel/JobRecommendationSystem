@@ -8,3 +8,7 @@ pytz
 sqlparse
 psycopg2-binary
 python-dotenv
+PyPDF2
+spacy
+scikit-learn
+# spacy-transformers

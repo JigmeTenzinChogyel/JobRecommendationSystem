@@ -19,24 +19,26 @@ function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
 
-            {/* Public Route */}
+            {/* Conditional Route */}
             <Route index element={<Home />} />
             <Route path="/job" element={<Job />} />
             <Route path="/about" element={<About />} />
-            
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
 
             {/* Protected Route */}
-            <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER, ROLES.RECRUITER]}/>}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER, ROLES.RECRUITER]} />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
 
-            {/* Page not found */}
-            <Route path="/unauthorized" element={<Unauthorized />} />
-            <Route path="*" element={<NotFound />} />
-            
           </Route>
+
+          {/* Public Route */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Page not found */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
       </AuthProvider>
     </BrowserRouter>

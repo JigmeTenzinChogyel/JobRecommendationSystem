@@ -20,7 +20,10 @@ function useAuthService(): Props {
     const fetchData = async () => {
       try {
         await auth();
-        await me();
+        if (isAuthenticated) {
+          await me();
+        }
+        setUser("public");
       } catch (error) {
         console.error(error);
       } finally {

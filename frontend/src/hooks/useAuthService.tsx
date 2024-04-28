@@ -8,6 +8,7 @@ type Props = {
   user: "seeker" | "recruiter" | "public";
   isAuthenticated: boolean;
   isLoading: boolean;
+  setisAuthenticated: (value: boolean) => void;
 };
 
 function useAuthService(): Props {
@@ -91,7 +92,7 @@ function useAuthService(): Props {
     }
   };
 
-  return { user, isAuthenticated, isLoading };
+  return { user, isAuthenticated, setisAuthenticated, isLoading };
 }
 
 export default useAuthService;

@@ -71,7 +71,7 @@ function MainNav() {
             <MenuButton as={Avatar} size="sm" cursor="pointer" />
             <MenuList textColor='black'>
               <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
-              <MenuItem w="100%" onClick={() => logout()} textAlign='center'>
+              <MenuItem w="100%" onClick={logout} textAlign='center'>
                 Logout
               </MenuItem>
             </MenuList>

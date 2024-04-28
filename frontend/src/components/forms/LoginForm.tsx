@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { FormControl, FormErrorMessage, FormLabel, useToast } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage, FormLabel, Icon, useToast } from '@chakra-ui/react'
 import api from '../../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants';
 
@@ -9,6 +9,7 @@ import { Box, Flex, Text, Input, Button, Link, Image, InputGroup, InputRightElem
 import { useState } from "react";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 interface FormValues {
     email: string;
@@ -58,16 +59,16 @@ const LoginForm: React.FC = () => {
 
     return (
         <Flex h="100vh" bg="gray.800" alignItems="center" justifyContent="center">
-            <Flex maxW="65%" bg="blue.900" rounded="xs" overflow="hidden">
+            <Flex maxW="65%" maxWidth="250vh" bg="blue.900" rounded="xs" overflow="hidden">
 
                 {/* Left Section */}
                 <Box flex="1">
-                    <Image src="https://www.nppc.gov.bt/wp-content/uploads/2023/02/5th-king.jpg" alt="Bill Gates" objectFit="cover" h="400px" />
-                    <Flex p={5} flexDirection="column">
-                        <Text color="white" fontSize="lg" fontWeight="bold" mt={6}>
+                    <Image src="src\assets\job1.jpg" alt="Bhutan Job" objectFit="cover" h="60vh" />
+                    <Flex py={3} flexDirection="column" textAlign='center'>
+                        <Text color="white" fontSize="md" fontWeight="bold" mt={2}>
                             Patience is a key element of success.
                         </Text>
-                        <Text color="gray.400" fontSize="sm" mt={2}>
+                        <Text color="gray.400" fontSize="xs" mt={1}>
                             We must always stand united in spirit and purpose, we must always be one nation with one common goal.
                         </Text>
                     </Flex>
@@ -76,7 +77,7 @@ const LoginForm: React.FC = () => {
                 {/* Right Section */}
                 <Box bg="gray.900" flex="1.5" display="flex" justifyContent="center" alignItems="center" flexDirection="column">
                     <Text fontSize="xl" fontWeight="bold" color="white" mb={5}>
-                        Login to your account
+                        Welcome
                     </Text>
 
                     {/* Email */}
@@ -129,18 +130,22 @@ const LoginForm: React.FC = () => {
                             Login
                         </Button>
 
+                        
+
                     </form>
 
                     <Text color="gray.400" mb={4} mt={4} fontSize="xs">
-                        Don't have an account? <Link href="#" color="white" fontWeight="bold">Signup</Link>
+                        Don't have an account? <Link href="/register" color="white" fontWeight="bold">Register</Link>
                     </Text>
                     <Text color="gray.400" fontSize="xs">
                         By creating account you agree to our Terms of Service
                     </Text>
                 </Box>
             </Flex>
-            <Link color="gray.200" position="absolute" top={4} left={4}>
-                Back to home
+            
+            <Link href="/" color="gray.200" position="absolute" top={4} left={4} display="flex" alignItems="center">
+            <Icon as={ArrowBackIcon} boxSize={6} mr={2} />
+                Back to home{/* it is in link, either you make link or history */}
             </Link>
         </Flex>
 

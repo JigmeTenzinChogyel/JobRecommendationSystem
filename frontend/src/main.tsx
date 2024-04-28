@@ -5,7 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider toastOptions={{ defaultOptions: { position: 'bottom-right', duration: 3000, isClosable: true } }}>        
       <App />
     </ChakraProvider>
   </React.StrictMode>,

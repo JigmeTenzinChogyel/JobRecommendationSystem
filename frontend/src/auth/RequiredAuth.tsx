@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
+import Loading from "../pages/Loading";
 
 const RequireAuth = ({ allowedRoles }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -7,7 +8,7 @@ const RequireAuth = ({ allowedRoles }) => {
 
   // Delay rendering until the API call is completed
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   // Check if the user's role is included in the allowedRoles array

@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { useAuth } from "../providers/AuthProvider";
 import Loading from "./Loading";
 
@@ -10,16 +11,16 @@ function Home() {
 
     if(isAuthenticated) {
         return (
-            <section>
+        <section>
             <button>{user === "seeker" ? "Jobs" : "Post Job"}</button>
         </section>
         )
     }
 
     return (
-        <section>
+        <Box minH="100vh">
             <button>Get Started</button>
-        </section>
+        </Box>
     )
 }
 

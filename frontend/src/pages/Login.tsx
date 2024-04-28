@@ -6,6 +6,7 @@ import Loading from "./Loading";
 function Login() {
 
     const { isAuthenticated, isLoading } = useAuth();
+    console.log(isAuthenticated)
     
     if (isLoading) {
         return <Loading />

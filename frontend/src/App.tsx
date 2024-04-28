@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./components/layouts/MainLayout";
 import Home from "./pages/Home";
-import Job from "./pages/Job";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -11,6 +10,9 @@ import { AuthProvider } from "./providers/AuthProvider";
 import RequireAuth from "./auth/RequiredAuth";
 import { ROLES } from "./constants";
 import Unauthorized from "./pages/Unauthorized";
+import Employer from "./pages/Employer";
+import FAQComponent from "./pages/FAQ";
+import Notification from "./pages/Notification";
 
 function App() {
   return (
@@ -21,12 +23,14 @@ function App() {
 
             {/* Conditional Route */}
             <Route index element={<Home />} />
-            <Route path="/job" element={<Job />} />
+            <Route path="/employer" element={<Employer />} />
             <Route path="/about" element={<About />} />
+            <Route path="/faq" element={<FAQComponent />} />
 
             {/* Protected Route */}
             <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER, ROLES.RECRUITER]} />}>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/notification" element={<Notification />} />
             </Route>
 
           </Route>

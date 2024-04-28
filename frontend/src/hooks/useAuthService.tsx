@@ -8,6 +8,7 @@ type Props = {
   user: "seeker" | "recruiter" | "public";
   isAuthenticated: boolean;
   isLoading: boolean;
+  setisAuthenticated: (value: boolean) => void;
 };
 
 function useAuthService(): Props {
@@ -20,7 +21,6 @@ function useAuthService(): Props {
     const fetchData = async () => {
       try {
         await auth();
-        await me();
       } catch (error) {
         console.error(error);
       } finally {
@@ -29,6 +29,7 @@ function useAuthService(): Props {
     };
 
     fetchData();
+
   }, [pathname]);
 
   const refreshToken = async () => {
@@ -42,6 +43,7 @@ function useAuthService(): Props {
       if (res.status === 200) {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         setisAuthenticated(true);
+        await me();
       } else {
         setisAuthenticated(false);
       }
@@ -66,13 +68,16 @@ function useAuthService(): Props {
       await refreshToken();
     } else {
       setisAuthenticated(true);
+      await me();
     }
   };
 
   const me = async () => {
-    if (!isAuthenticated) {
-      setUser("public")
-    }
+    // console.log(isAuthenticated)
+    // if (!isAuthenticated) {
+    //   setUser("public")
+    //   return;
+    // }
     try {
       const res = await api.get("/api/user/");
 
@@ -87,7 +92,7 @@ function useAuthService(): Props {
     }
   };
 
-  return { user, isAuthenticated, isLoading };
+  return { user, isAuthenticated, setisAuthenticated, isLoading };
 }
 
 export default useAuthService;

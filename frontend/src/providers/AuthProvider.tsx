@@ -3,12 +3,13 @@ import useAuthService from "../hooks/useAuthService";
 
 const useAuthValue = () => {
 
-  const { user, isAuthenticated, isLoading } = useAuthService();
+  const { user, isAuthenticated, isLoading, setisAuthenticated } = useAuthService();
 
   return {
     user,
     isAuthenticated,
-    isLoading
+    isLoading,
+    setisAuthenticated
   };
 };
 

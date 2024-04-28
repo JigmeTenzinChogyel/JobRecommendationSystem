@@ -41,12 +41,9 @@ function MainNav() {
         align="center"
         justify="space-between"
         wrap="wrap"
-        padding="1rem"
         bg={isScrolled ? "#0A142F" : "white"}
         color={isScrolled ? "teal.200" : "black"}
-        borderBottom={isScrolled ? "1px" : ""}
-        borderBottomColor={isScrolled ? "gray.200" : "white"}
-        position="sticky"
+        position="fixed"
         top={0}
         left={0}
         right={0}
@@ -85,6 +82,7 @@ function MainNav() {
     )
   }
   return (
+
     <Flex
       as="nav"
       align="center"
@@ -112,6 +110,7 @@ function MainNav() {
 
       {/* Navigation Links */}
       <Navbar desktop />
+      
       {/* Sign In/Register Buttons */}
       <Box display={{ base: 'none', md: 'block' }}>
         <Center height='30px'>
@@ -124,6 +123,7 @@ function MainNav() {
           </ChakraLink>
         </Center>
       </Box>
+
       {/* Toggle Menu Button */}
       <NavDrawer />
 

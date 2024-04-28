@@ -1,6 +1,6 @@
-import { Box } from "@chakra-ui/react";
 import { useAuth } from "../providers/AuthProvider";
 import Loading from "./Loading";
+import HomeHero from "../components/Hero/HomeHero";
 
 function Home() {
     const {user, isAuthenticated, isLoading} = useAuth()
@@ -18,9 +18,7 @@ function Home() {
     }
 
     return (
-        <Box minH="100vh">
-            <button>Get Started</button>
-        </Box>
+        <HomeHero />
     )
 }
 

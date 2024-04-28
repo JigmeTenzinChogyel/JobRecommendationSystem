@@ -1,9 +1,9 @@
 import spacy
-
+import os
 
 def process(text):
     
-    nlp = spacy.load("/home/jigme/Documents/FYP/web/backend/model-best")
+    nlp = spacy.load(os.getenv("MODEL_PATH"))
     doc = nlp(text)
     skills, experience, qualifications = [], [], []
 

@@ -20,7 +20,6 @@ function useAuthService(): Props {
     const fetchData = async () => {
       try {
         await auth();
-        await me();
       } catch (error) {
         console.error(error);
       } finally {
@@ -29,6 +28,7 @@ function useAuthService(): Props {
     };
 
     fetchData();
+
   }, [pathname]);
 
   const refreshToken = async () => {
@@ -42,6 +42,7 @@ function useAuthService(): Props {
       if (res.status === 200) {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         setisAuthenticated(true);
+        await me();
       } else {
         setisAuthenticated(false);
       }
@@ -66,13 +67,16 @@ function useAuthService(): Props {
       await refreshToken();
     } else {
       setisAuthenticated(true);
+      await me();
     }
   };
 
   const me = async () => {
-    if (!isAuthenticated) {
-      setUser("public")
-    }
+    // console.log(isAuthenticated)
+    // if (!isAuthenticated) {
+    //   setUser("public")
+    //   return;
+    // }
     try {
       const res = await api.get("/api/user/");
 

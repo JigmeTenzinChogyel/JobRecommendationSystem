@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import User, Resume, Job
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -17,8 +17,6 @@ from api.machine.ner import process
 import logging
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -80,12 +78,25 @@ class ResumeUpdateView(generics.UpdateAPIView):
 #     serializer_class = ResumeSerializer
 #     permission_classes = [IsAuthenticated]
 
+
 # Jobs
+
+# get a particular job
 class JobRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
 
+# get the job user created
+class UserJobListView(generics.ListAPIView):
+    serializer_class = JobSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Job.objects.filter(user=user)
+    
+# create job
 class JobCreateView(generics.CreateAPIView):
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
@@ -121,6 +132,7 @@ class JobDeleteAPIView(generics.DestroyAPIView):
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
 
+# recommended jobs
 class JobRecommendationView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = JobSerializer
@@ -158,3 +170,14 @@ class JobRecommendationView(generics.ListAPIView):
         job_indices = job_indices.tolist()  # Convert numpy.int64 to regular Python integers
         recommended_jobs = [jobs[index] for index in job_indices]
         return recommended_jobs
+
+# random list of jobs 
+class RandomJobView(generics.ListAPIView):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        queryset = self.get_queryset().order_by('?')
+        random_job = get_object_or_404(queryset)
+        return random_job

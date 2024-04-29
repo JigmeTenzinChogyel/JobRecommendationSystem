@@ -2,7 +2,7 @@ import { Flex, Text } from "@chakra-ui/react";
 
 function Filter() {
     return (
-        <Flex w='25%'>
+        <Flex w={{base: "100%", md: "25%"}}>
             <Text>Filter</Text>
         </Flex>
     )

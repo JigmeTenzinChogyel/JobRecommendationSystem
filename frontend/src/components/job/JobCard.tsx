@@ -1,15 +1,8 @@
 import { Box, Flex, Heading, Text, Button, Icon } from "@chakra-ui/react";
 import { FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
+import { JobType } from "./JobType";
 
-type Props = {
-    title: string;
-    description: string;
-    location: string;
-    salary: number;
-    deadline: Date;
-};
-
-function JobCard({ title, location, salary, deadline, description }: Props) {
+function JobCard({ title, location, salary, deadline, description }: JobType) {
     return (
         <Box
             bg="white"

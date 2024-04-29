@@ -14,7 +14,7 @@ function HomeHero() {
                 heading="Find Your Dream Job"
                 subHeading="Unlock your career potential with our advanced job matching algorithm"
             />
-            <Flex px='5%' py='2%'>
+            <Flex px='5%' py='2%' direction={{base: "column", md: "row"}}  >
                 <Filter />
                 <Job />
             </Flex>

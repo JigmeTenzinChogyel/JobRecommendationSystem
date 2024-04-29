@@ -1,62 +1,61 @@
-import { Flex, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, IconButton, Text } from "@chakra-ui/react";
+import { useState } from "react";
+import { jobData } from "./JobData";
+import { FaList, FaThLarge } from "react-icons/fa"; // Import icons for list and card view
 import JobCard from "./JobCard";
+import JobList from "./JobList";
 
 function Job() {
-    const jobData = [
-        {
-            title: 'Software Engineer',
-            description: "The quick brown fox jumps over the lazy dog is an English-language pangram a sentence that contains all of the letters of the English alphabet. Owing to its existence, Chakra was created.",
-            location: 'San Francisco, CA',
-            salary: 12000,
-            deadline: new Date(),
-        },
-        {
-            title: 'Software Engineer',
-            description: "The quick brown fox jumps over the lazy dog is an English-language pangram a sentence that contains all of the letters of the English alphabet. Owing to its existence, Chakra was created.",
-            location: 'San Francisco, CA',
-            salary: 12000,
-            deadline: new Date(),
-        },
-        {
-            title: 'Software Engineer',
-            description: "The quick brown fox jumps over the lazy dog is an English-language pangram a sentence that contains all of the letters of the English alphabet. Owing to its existence, Chakra was created.",
-            location: 'San Francisco, CA',
-            salary: 12000,
-            deadline: new Date(),
-        },
-        {
-            title: 'Software Engineer',
-            description: "The quick brown fox jumps over the lazy dog is an English-language pangram a sentence that contains all of the letters of the English alphabet. Owing to its existence, Chakra was created.",
-            location: 'San Francisco, CA',
-            salary: 12000,
-            deadline: new Date(),
-        },
-    ]
+
+    const [isCard, setIsCard] = useState<boolean>(true);
 
     return (
-        <Flex direction='column' gap={8}>
-            <Flex justify='space-between' align='center'>
-                <Text>Avaliable Jobs</Text>
-                <Text>Display type</Text>
+        <Flex direction="column" gap={8} w={{ base: "100%", md: "75%" }}>
+            <Flex align="center" justify="space-between">
+                <Text fontSize='xl' fontWeight='bold'>Avaliable Jobs</Text>
+                {/* Toggle display type */}
+                <Flex align="center">
+                    <IconButton 
+                        icon={ isCard ? <FaThLarge/> : <FaList />} 
+                        aria-label="list or card toggle" 
+                        variant='none'
+                        onClick={() => setIsCard(!isCard)}
+                        />
+                </Flex>
             </Flex>
-            <Grid
-                templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
-                gap={6}
-            >
-                {jobData.map((job, index) => (
-                    <GridItem key={index}>
-                        <JobCard
+            {isCard ? (
+                <Grid
+                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                    gap={6}
+                >
+                    {jobData.map((job, index) => (
+                        <GridItem key={index}>
+                            <JobCard
+                                title={job.title}
+                                description={job.description}
+                                location={job.location}
+                                salary={job.salary}
+                                deadline={job.deadline}
+                            />
+                        </GridItem>
+                    ))}
+                </Grid>
+            ) : (
+                <Box>
+                    {jobData.map((job, index) => (
+                        <JobList
+                            key={index}
                             title={job.title}
                             description={job.description}
                             location={job.location}
                             salary={job.salary}
                             deadline={job.deadline}
                         />
-                    </GridItem>
-                ))}
-            </Grid>
+                    ))}
+                </Box>
+            )}
         </Flex>
-    )
+    );
 }
 
 export default Job;

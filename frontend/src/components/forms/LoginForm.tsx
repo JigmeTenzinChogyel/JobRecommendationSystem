@@ -1,15 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { FormControl, FormErrorMessage, FormLabel, Icon, useToast } from '@chakra-ui/react'
-import api from '../../api';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants';
-
+import { FormControl, FormErrorMessage, FormLabel, Icon } from '@chakra-ui/react'
 import { Box, Flex, Text, Input, Button, Link, Image, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
 import { useState } from "react";
-
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import Loading from '../../pages/Loading';
+import { useLogin } from '../../hooks/auth';
 
 interface FormValues {
     email: string;
@@ -18,10 +15,8 @@ interface FormValues {
 
 const LoginForm: React.FC = () => {
 
-    const navigate = useNavigate();
-    const toast = useToast();
+    const { login, isLoading } = useLogin();
     const [showPassword, setShowPassword] = useState(false);
-
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -34,28 +29,12 @@ const LoginForm: React.FC = () => {
 
     const onSubmit = async (data: FormValues) => {
         console.log(data)
-        // Handle form submission logic here
-        try {
-            const response = await api.post("/api/token/", data);
-            if (response.status === 200) {
-                localStorage.setItem(ACCESS_TOKEN, response.data.access);
-                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-                toast({
-                    title: 'Welcome back!',
-                    description: 'You have successfully logged in.',
-                    status: 'success',
-                });
-                navigate("/");
-            }
-        } catch (err) {
-            console.error(err);
-            toast({
-                title: 'Login failed!',
-                description: 'Invalid username or password. Please try again.',
-                status: 'error',
-            });
-        }
+        await login(data);
     };
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <Flex h="100vh" bg="gray.800" alignItems="center" justifyContent="center">
@@ -129,9 +108,6 @@ const LoginForm: React.FC = () => {
                         <Button type='submit' colorScheme="blue" mb={4} w="100%">
                             Login
                         </Button>
-
-                        
-
                     </form>
 
                     <Text color="gray.400" mb={4} mt={4} fontSize="xs">
@@ -142,9 +118,9 @@ const LoginForm: React.FC = () => {
                     </Text>
                 </Box>
             </Flex>
-            
+
             <Link href="/" color="gray.200" position="absolute" top={4} left={4} display="flex" alignItems="center">
-            <Icon as={ArrowBackIcon} boxSize={6} mr={2} />
+                <Icon as={ArrowBackIcon} boxSize={6} mr={2} />
                 Back to home{/* it is in link, either you make link or history */}
             </Link>
         </Flex>

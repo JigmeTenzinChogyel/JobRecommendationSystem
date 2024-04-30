@@ -1,21 +1,21 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import api from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useRegister } from '../../hooks/auth';
+import Loading from '../../pages/Loading';
 
-type user_type = 'seeker' | 'recruiter';
+type user_role = 'seeker' | 'recruiter';
 
 interface FormValues {
     name: string;
     email: string;
     password: string;
     confirmPassword: string;
-    user_type: user_type;
+    user_role: user_role;
 }
 
 const RegisterForm: React.FC = () => {
 
-    const navigate = useNavigate();
+    const { register: submit, isLoading } = useRegister()
 
     const {
         register,
@@ -26,23 +26,15 @@ const RegisterForm: React.FC = () => {
 
     const onSubmit = async (data: FormValues) => {
         console.log(data);
-        const { name, email, password, user_type } = data;
-        try {
-            const response = await api.post("/api/user/register/", {
-                name,
-                email,
-                password,
-                user_type,
-            });
-            console.log(response.data)
-            alert("success")
-            navigate("/login");
-        } catch (err) {
-            console.error(err)
-        }
+        const { name, email, password, user_role } = data;
+        await submit({ name, email, password, user_role });
     };
 
     const password = watch('password');
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <div>
@@ -100,16 +92,16 @@ const RegisterForm: React.FC = () => {
                     {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
                 </div>
                 <div>
-                    <label htmlFor="user_type">User Type:</label>
+                    <label htmlFor="user_role">User Role:</label>
                     <select
-                        id="user_type"
-                        {...register('user_type', { required: 'User type is required' })}
+                        id="user_role"
+                        {...register('user_role', { required: 'User type is required' })}
                     >
                         <option value="">Select user type</option>
                         <option value="seeker">Seeker</option>
                         <option value="recruiter">Recruiter</option>
                     </select>
-                    {errors.user_type && <p>{errors.user_type.message}</p>}
+                    {errors.user_role && <p>{errors.user_role.message}</p>}
                 </div>
                 <button type="submit">Register</button>
             </form>

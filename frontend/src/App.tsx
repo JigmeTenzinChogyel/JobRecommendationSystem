@@ -8,11 +8,15 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./providers/AuthProvider";
 import RequireAuth from "./auth/RequiredAuth";
-import { ROLES } from "./constants";
+import { ROLES } from "./constants/constants";
 import Unauthorized from "./pages/Unauthorized";
 import Employer from "./pages/Employer";
 import FAQComponent from "./pages/FAQ";
 import Notification from "./pages/Notification";
+import JobDetail from "./pages/JobDetail";
+import Job from "./pages/Job";
+import PostJob from "./pages/PostJob";
+import PostResume from "./pages/PostResume";
 
 function App() {
   return (
@@ -23,13 +27,21 @@ function App() {
 
             {/* Conditional Route */}
             <Route index element={<Home />} />
+            <Route path="/job" element={<Job />} />
             <Route path="/employer" element={<Employer />} />
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<FAQComponent />} />
 
             {/* Protected Route */}
+            <Route element={<RequireAuth allowedRoles={[ROLES.RECRUITER]} />}>
+              <Route path="/job/post" element={<PostJob />} />
+            </Route>
+            {/* <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER]} />}> */}
+              <Route path="/resume/post" element={<PostResume />} />
+            {/* </Route> */}
             <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER, ROLES.RECRUITER]} />}>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/job/:id" element={<JobDetail />} />
               <Route path="/notification" element={<Notification />} />
             </Route>
 

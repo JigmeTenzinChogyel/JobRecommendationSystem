@@ -1,8 +1,10 @@
-import { Flex, Icon, Text, Button } from "@chakra-ui/react";
+import { Flex, Icon, Text, IconButton } from "@chakra-ui/react";
 import { JobType } from "./JobType";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaBookmark, FaEye, FaMapMarkerAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-function JobList({ title, location, salary, deadline }: JobType) {
+function JobList({id, title, location, salary, deadline }: JobType) {
+  const navigate = useNavigate();
   return (
     <Flex
       bg="white"
@@ -17,27 +19,44 @@ function JobList({ title, location, salary, deadline }: JobType) {
       w="100%"
       overflowX="auto"
     >
-        <Text
-          fontSize={{ base: "md", md: "lg" }}
-          fontWeight="bold"
-          mr={4}
-          whiteSpace="nowrap"
-        >
-          {title}
-        </Text>
-        <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
-          <Icon as={FaMapMarkerAlt} color="teal.500" mr={2} />
-          {location}
-        </Text>
-        <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
-          Salary: {salary}
-        </Text>
-        <Text fontSize={{ base: "xs", md: "sm" }} color="gray.500" whiteSpace="nowrap">
-          Deadline: {`${deadline.getDate()}`}
-        </Text>
-      <Button colorScheme="teal" size="sm" minWidth='10em'>
-        View Details
-      </Button>
+      <Text
+        fontSize={{ base: "md", md: "lg" }}
+        fontWeight="bold"
+        mr={4}
+        whiteSpace="nowrap"
+        color="teal.600"
+      >
+        {title}
+      </Text>
+      <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
+        <Icon as={FaMapMarkerAlt} color="teal.500" mr={2} />
+        {location}
+      </Text>
+      <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
+        Salary: {salary}
+      </Text>
+      <Text fontSize={{ base: "xs", md: "sm" }} color="gray.500" whiteSpace="nowrap">
+        Deadline: {`${deadline}`}
+      </Text>
+      <Flex wrap='nowrap'>
+      <IconButton
+        variant="ghost"
+        size="sm"
+        color="teal.500"
+        _hover={{ color: "teal.600" }}
+        icon={<FaBookmark />}
+        aria-label="bookmark"
+      />
+      <IconButton
+        variant="ghost"
+        size="sm"
+        color="teal.500"
+        _hover={{ color: "teal.600" }}
+        icon={<FaEye />}
+        aria-label="details"
+        onClick={() => navigate(`${id}`)}
+      />
+      </Flex>
     </Flex>
   );
 }

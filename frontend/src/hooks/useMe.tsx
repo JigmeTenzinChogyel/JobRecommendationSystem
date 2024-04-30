@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import { Me } from "../components/types/Types";
 
 function useMe() {
 
-    const [me, setMe] = useState();
+    const [me, setMe] = useState<Me>({
+        id: 0,
+        name: "",
+        email: "",
+        user_type: "seeker",
+        created_at: "",
+        updated_at: "",
+    });
+    const [ isLoading, setIsLoading ] = useState(true)
+    
 
     useEffect(() => {
 
@@ -11,10 +21,12 @@ function useMe() {
             try {
                 const response = await api.get("/api/user/");
                 if (response.status === 200) {
-                    setMe(response.data);
+                    setMe(response.data as Me);
                 }
             } catch (error) {
                 console.error(`Failed getting me: ${error}`);
+            } finally {
+                setIsLoading(false)
             }
 
         }
@@ -23,7 +35,7 @@ function useMe() {
         
     }, []);
 
-    return me;
+    return { me, isLoading };
 }
 
 export default useMe;

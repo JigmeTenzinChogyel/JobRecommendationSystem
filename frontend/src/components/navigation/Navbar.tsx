@@ -31,6 +31,16 @@ function Navbar({ desktop, isAuthenticated }: Props) {
                 textDecoration={isActive("/") ? "underline" : "inherit"}
                 fontWeight={isActive("/") ? "bold" : "normal"}
             >
+                Home
+            </ChakraLink>
+            <ChakraLink
+                as={ReactRouterLink}
+                to="/job"
+                mx={4}
+                my={2}
+                textDecoration={isActive("/job") ? "underline" : "inherit"}
+                fontWeight={isActive("/job") ? "bold" : "normal"}
+            >
                 Job
             </ChakraLink>
             <ChakraLink

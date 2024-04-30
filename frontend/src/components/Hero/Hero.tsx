@@ -1,16 +1,18 @@
-import { Flex, Heading, Text, Box } from "@chakra-ui/react";
+import { Flex, Heading, Text, Box, Button } from "@chakra-ui/react";
 
 type Props = {
-    imageUrl: string
-    heading: string
-    subHeading: string
-}
+    imageUrl: string;
+    heading: string;
+    subHeading: string;
+    buttonName?: string
+    handleClick?(): void
+    minH?: string
+};
 
-function Hero( { imageUrl, heading, subHeading }: Props ) {
-
+function Hero({ imageUrl, heading, subHeading, buttonName, handleClick, minH }: Props) {
     return (
         <Flex
-            minH="35vh"
+            minH={minH? minH : "20vh"}
             backgroundImage={`url('${imageUrl}')`}
             backgroundSize="cover"
             backgroundPosition="center"
@@ -28,10 +30,33 @@ function Hero( { imageUrl, heading, subHeading }: Props ) {
                 bg="rgba(0, 0, 0, 0.5)"
                 zIndex={1}
             />
-            <Box zIndex={2} color="white" textAlign='center' p={5}>
-                <Heading>{heading}</Heading>
-                <Text as="i" fontSize={{base: "xs", md: "sm"}}>{subHeading}</Text>
-            </Box>
+            <Flex zIndex={2} color="white" p={5} align='center' justify='center' direction='column' gap={6} textAlign='center'>
+                <Box>
+                    <Heading fontSize={{ base: "md", md: "lg", lg: "xl" }}>
+                        {heading}
+                    </Heading>
+                    <Text
+                        as="i"
+                        fontSize={{ base: "xs", md: "sm" }}
+                    >
+                        {subHeading}
+                    </Text>
+                </Box>
+
+                {
+                    buttonName
+                    &&
+                    <Button
+                        onClick={handleClick}
+                        _hover={{ backgroundColor: "gray.500" }}
+                        variant='outline'
+                        color='white'
+                        fontSize={{ base: 'xs', md: 'sm' }}
+                    >
+                        {buttonName}
+                    </Button>
+                }
+            </Flex>
         </Flex>
     );
 }

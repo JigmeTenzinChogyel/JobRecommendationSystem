@@ -1,25 +1,26 @@
-from .models import User, Resume, Job
+from .models import User, Resume, Company, Job, Application, Notification
 from rest_framework import serializers
+from django.utils import timezone
 
+
+# User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "email", "name", "password", "user_type", "created_at", "updated_at"]
-        extra_kwargs = {
-            "password": {"write_only": True},
-            "created_at": {"read_only": True}
-        }
-
+        fields = ('id', 'email', 'name', 'password', 'user_role', 'bio', 'avatar', 'created_at', 'updated_at')
+        read_only_fields = ('created_at', 'updated_at')
+        extra_kwargs = {"password": {"write_only": True}}
+    
     def create(self, validated_data):
-        user_type = validated_data.pop('user_type', None)
+        user_role = validated_data.pop('user_role', None)
         user = User.objects.create_user(
             validated_data["email"],
             validated_data["name"],
             validated_data["password"],
-            user_type=user_type
+            user_role=user_role
         )
         return user
-    
+
 # Resume
 class ResumeSerializer(serializers.ModelSerializer):
     
@@ -29,28 +30,51 @@ class ResumeSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}}
 
-class ResumeCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Resume
-        fields = ['id', 'user', 'resume_file', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at']
-        extra_kwargs = {"user": {"read_only": True}}
+# Company
+class CompanySerializer(serializers.ModelSerializer):
 
-class ResumeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Resume
-        fields = ['id', 'user', 'skills', 'experience', 'qualification', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at']
-        extra_kwargs = {"user": {"read_only": True}}
+        model = Company
+        fields = ['id', 'user', 'name', 'email', 'description', 'city', 'country', 'logo', 'created_at', 'updated_at']
+        read_only_fields = [ 'user', 'created_at', 'updated_at']
 
+# Job
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
-        fields = ['id', 'user', 'title', 'description', 'location', 'salary', 'qualification', 'experience', 'skills', 'deadline', 'job_file', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'title', 'description', 'min_salary', 'max_salary', 'qualification', 'experience', 'skills', 'deadline', 'job_file', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}}
 
-class JobListSerializer(serializers.ModelSerializer):
+# Application
+class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Job
-        fields = ['id', 'qualification', 'experience', 'skills']
+        model = Application
+        fields = ['id', 'user', 'job', 'application_status', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+        extra_kwargs = {"user": {"read_only": True}, "job": {"read_only": True}}
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        job_id = self.context['request'].data.get('id')
+        # Ensure job exists and is valid
+        try:
+            job = Job.objects.get(id=job_id)
+        except:
+            raise serializers.ValidationError("Job not found")
+        if Application.objects.filter(user=user, job=job).exists():
+            raise serializers.ValidationError("You have already applied for this job")
+        if job.deadline < timezone.now().date():
+            raise serializers.ValidationError("Job deadline has passed")
+
+        return Application.objects.create(user=user, job=job, **validated_data)
+    
+    
+# Notification
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'user', 'job', 'message', 'is_read', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+        extra_kwargs = {"user": {"read_only": True}}
+

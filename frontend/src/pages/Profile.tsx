@@ -1,7 +1,16 @@
+import Hero from "../components/Hero/Hero";
+import { ProfileHeroData } from "../components/Hero/HeroData";
+
 function Profile() {
 
     return (
-        <div>Profile</div>
+        <>
+            <Hero
+                imageUrl={ProfileHeroData.imageUrl}
+                heading={ProfileHeroData.heading}
+                subHeading={ProfileHeroData.subHeading} 
+                />
+        </>
     )
 }
 

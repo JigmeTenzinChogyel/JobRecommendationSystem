@@ -114,8 +114,23 @@ class Application(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('user', 'job')
+
     def __str__(self):
-        return f"applicant: {self.user}"
+        return f"applicant: {self.user} = {self.job.title}"
+    
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_bookmarks')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='user_bookmarks')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'job')
+
+    def __str__(self):
+        return f"Bookmark: {self.user.name} - {self.job.title}"
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='notification')
@@ -126,6 +141,7 @@ class Notification(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"notify: {self.user}"
+        return f"Notify: {self.user.name} - {self.job.title}"
+
 
 

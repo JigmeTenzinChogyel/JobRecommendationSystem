@@ -1,4 +1,4 @@
-from .models import User, Resume, Company, Job, Application, Notification
+from .models import User, Resume, Company, Job, Application, Notification, Bookmark
 from rest_framework import serializers
 from django.utils import timezone
 
@@ -69,6 +69,25 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
         return Application.objects.create(user=user, job=job, **validated_data)
     
+# Bookmark
+class BookmarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bookmark
+        fields = ['id', 'user', 'job', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'job', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        job_id = self.context['request'].data.get('id')
+        # Ensure job exists and is valid
+        try:
+            job = Job.objects.get(id=job_id)
+        except:
+            raise serializers.ValidationError("Job not found")
+        if Bookmark.objects.filter(user=user, job=job).exists():
+            raise serializers.ValidationError("You have already bookmarked this job")
+
+        return Bookmark.objects.create(user=user, job=job, **validated_data)
     
 # Notification
 class NotificationSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Resume, Job, Company, Application, Notification
+from .models import User, Resume, Job, Company, Application, Notification, Bookmark
 
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -49,7 +49,11 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('user', 'job', 'application_status')
     readonly_fields = ('created_at', 'updated_at')
 
-admin.site.register(Application, ApplicationAdmin)
+class BookmarkAdmin(admin.ModelAdmin):
+    list_display = ('user', 'job')
+    readonly_fields = ('created_at', 'updated_at')
+
+admin.site.register(Bookmark, BookmarkAdmin)
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('user', 'job', 'message', 'is_read')

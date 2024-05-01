@@ -5,6 +5,7 @@ from .models import (
     Company,
     Application,
     Notification,
+    Bookmark,
 )
 from .serializers import (
     UserSerializer, 
@@ -13,7 +14,7 @@ from .serializers import (
     CompanySerializer,
     ApplicationSerializer,
     NotificationSerializer,
-    
+    BookmarkSerializer,
 )
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -29,7 +30,7 @@ from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from .permissions import IsRecruiter, IsSeeker
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotFound
 from django.db import transaction
 
 logger = logging.getLogger(__name__)
@@ -492,8 +493,8 @@ class ApplicationUpdateView(generics.UpdateAPIView):
                 # Retrieve the job associated with the application
                 job = application.job
                 # Check if the job's deadline has passed
-                # if job.deadline < timezone.now().date():
-                #     raise ValidationError("Job deadline has passed, application cannot be updated")
+                if job.deadline < timezone.now().date():
+                    raise ValidationError("Job deadline has passed, application cannot be updated")
                 # Proceed with the update if the deadline has not passed
                 instance = serializer.save()
                 notification = Notification.objects.create(
@@ -503,7 +504,43 @@ class ApplicationUpdateView(generics.UpdateAPIView):
                 )
                 notification.save()
 
+# Bookmark
+# create
+class BookmarkCreateView(generics.CreateAPIView):
+    serializer_class = BookmarkSerializer
+    permission_classes = [IsAuthenticated, IsSeeker]
 
-# class ApplicationDeleteView(generics.DestroyAPIView):
-#     serializer_class = ApplicationSerializer
-#     pagination_class = 
+    def perform_create(self, serializer):
+        serializer.save(job_id=self.request.data.get('id'))
+
+# delete
+class BookmarkDeleteView(generics.DestroyAPIView):
+    serializer_class = BookmarkSerializer
+    permission_classes = [IsAuthenticated, IsSeeker]
+
+    def get_object(self):
+        try:
+            book_id = self.kwargs.get('pk')
+            bookmark = Bookmark.objects.get(id=book_id)
+        except Bookmark.DoesNotExist:
+            raise Http404("Job Not Found")
+        return bookmark
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+# get the bookmark for the current user and the job
+class BookmarkFromJobView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerializer
+
+    def get_object(self):
+        user = self.request.user
+        job_id = self.kwargs.get('job_id')
+
+        try:
+            bookmark = Bookmark.objects.get(user=user, job_id=job_id)
+            return bookmark
+        except Bookmark.DoesNotExist:
+            raise NotFound("Job Not Found")

@@ -16,6 +16,9 @@ from .views import (
     UserJobListView,
     ApplicationCreateView,
     ApplicationUpdateView,
+    BookmarkCreateView,
+    BookmarkDeleteView,
+    BookmarkFromJobView,
 )
 
 urlpatterns = [
@@ -43,5 +46,10 @@ urlpatterns = [
     # Application urls
     path('applications/create/', ApplicationCreateView.as_view(), name='application_create'),
     path('applications/<int:pk>/update/', ApplicationUpdateView.as_view(), name='application_update'),
+
+    # Bookmark urls
+    path('bookmarks/create/', BookmarkCreateView.as_view(), name='bookmark_create'),
+    path('bookmarks/<int:pk>/delete/', BookmarkDeleteView.as_view(), name='bookmark_delete'),
+    path('bookmarks/<int:job_id>/job/', BookmarkFromJobView.as_view(), name='bookmark_from_job'),
 
 ]

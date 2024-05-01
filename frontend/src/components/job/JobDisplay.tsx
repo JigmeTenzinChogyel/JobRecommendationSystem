@@ -1,22 +1,17 @@
-import { Box, Button, Flex, Grid, GridItem, IconButton, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, IconButton, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaList, FaThLarge } from "react-icons/fa";
 import JobCard from "./JobCard";
 import JobList from "./JobList";
-import Filter from "../filter/Filter";
-import { useAuth } from "../../providers/AuthProvider";
-import { useNavigate } from "react-router-dom";
 import { JobResponse } from "../../hooks/job";
 
 type Props = {
     title?: string
     jobs?: JobResponse[]
 }
-function JobToggleDisplay({ jobs, title }: Props) {
+function JobDisplay({ jobs, title }: Props) {
 
     const [isCard, setIsCard] = useState<boolean>(true);
-    const { user } = useAuth();
-    const navigate = useNavigate();
 
     if (!jobs || jobs.length === 0) {
         return <>No Jobs</>
@@ -24,7 +19,6 @@ function JobToggleDisplay({ jobs, title }: Props) {
 
     return (
         <Flex px='5%' py='2%' gap={10} direction={{ base: "column", md: "row" }} position='relative' >
-            <Filter />
             <Flex direction="column" gap={8} w={{ base: "100%", md: "75%" }}>
                 <Flex align="center" justify="space-between">
                     <Text fontSize='xl' fontWeight='bold'>{title}</Text>
@@ -80,4 +74,4 @@ function JobToggleDisplay({ jobs, title }: Props) {
     )
 }
 
-export default JobToggleDisplay;
+export default JobDisplay;

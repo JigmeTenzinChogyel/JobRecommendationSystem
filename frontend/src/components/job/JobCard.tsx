@@ -4,22 +4,22 @@ import {
   Heading,
   Text,
   Button,
-  Icon,
   IconButton,
 } from "@chakra-ui/react";
-import { FaBookmark, FaMapMarkerAlt } from "react-icons/fa";
-import { JobType } from "./JobType";
 import { useNavigate } from "react-router-dom";
+import { JobResponse } from "../../hooks/job";
+import {icons} from "../../utils/icons"
+import { postDate } from "../../utils/postDate";
 
-function JobCard({
-  id,
-  title,
-  location,
-  salary,
-  deadline,
-  description,
-}: JobType) {
+type Props = {
+  job?: JobResponse
+  bookmark?: boolean
+  handleBookmark?(): void
+}
+function JobCard({ job, bookmark, handleBookmark }: Props) {
   const navigate = useNavigate();
+
+  if (!job) return;
 
   return (
     <Box
@@ -40,16 +40,21 @@ function JobCard({
     >
       <Flex justifyContent="space-between" alignItems="center" mb={4} gap={4}>
         <Heading size="md" color="teal.600">
-          {title}
+          {job.title}
         </Heading>
-        <IconButton
+        {
+          bookmark 
+          &&
+          <IconButton
           variant="ghost"
           size="sm"
           color="teal.500"
           _hover={{ color: "teal.600" }}
-          icon={<FaBookmark />}
+          icon={bookmark ? <icons.bookMarked /> : <icons.bookMark />}
           aria-label="bookmark"
+          onClick={ handleBookmark }
         />
+        }
       </Flex>
       <Text
         mb={2}
@@ -58,26 +63,20 @@ function JobCard({
         fontSize="sm"
         flex="1 0 auto"
       >
-        {description}
+        {job.summary}
       </Text>
       <Box mt="auto">
-        <Text mb={2} color="gray.600" fontSize="sm">
-          <Icon as={FaMapMarkerAlt} color="teal.500" mr={2} />
-          {location}
-        </Text>
         <Text mb={4} color="gray.700" fontSize="sm" fontWeight="bold">
-          Salary: {salary}
+          Salary: {`${Math.floor(job.min_salary)} - ${Math.floor(job.max_salary)}`}
         </Text>
         <Flex justifyContent="space-between" alignItems="center">
-          <Text fontSize="sm" color="gray.500">
-            Deadline: {`${deadline}`}
-          </Text>
+          <Text fontSize="sm" color="gray.500">{postDate(job.created_at)}</Text>
           <Button
             colorScheme="teal"
             variant="solid"
             size="sm"
             _hover={{ bg: "teal.600" }}
-            onClick={() => navigate(`${id}`)}
+            onClick={() => navigate(`${job.id}`)}
           >
             Details
           </Button>

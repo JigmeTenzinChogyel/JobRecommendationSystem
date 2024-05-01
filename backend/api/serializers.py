@@ -42,7 +42,7 @@ class CompanySerializer(serializers.ModelSerializer):
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
-        fields = ['id', 'user', 'title', 'description', 'min_salary', 'max_salary', 'qualification', 'experience', 'skills', 'deadline', 'job_file', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'title', 'description', 'summary', 'min_salary', 'max_salary', 'qualification', 'experience', 'skills', 'deadline', 'job_file', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}}
 

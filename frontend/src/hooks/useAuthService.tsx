@@ -3,16 +3,18 @@ import { useLocation } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/constants";
 import api from "../api";
 import { jwtDecode } from "jwt-decode";
+import { MeResponse } from "./user/type";
+import { ME_URL, REFRESH_URL } from "../constants/url";
 
 type Props = {
-  user: "seeker" | "recruiter" | "public";
+  user: MeResponse | undefined
   isAuthenticated: boolean;
   isLoading: boolean;
   setisAuthenticated: (value: boolean) => void;
 };
 
 function useAuthService(): Props {
-  const [user, setUser] = useState<"seeker" | "recruiter" | "public">("public");
+  const [user, setUser] = useState<MeResponse>();
   const [isAuthenticated, setisAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
@@ -36,7 +38,7 @@ function useAuthService(): Props {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
 
     try {
-      const res = await api.post("/api/token/refresh/", {
+      const res = await api.post(REFRESH_URL, {
         refresh: refreshToken,
       });
 
@@ -73,22 +75,14 @@ function useAuthService(): Props {
   };
 
   const me = async () => {
-    // console.log(isAuthenticated)
-    // if (!isAuthenticated) {
-    //   setUser("public")
-    //   return;
-    // }
     try {
-      const res = await api.get("/api/user/");
+      const res = await api.get(ME_URL);
 
       if (res.status === 200) {
-        setUser(res.data.user_type);
-      } else {
-        setUser("public");
+        setUser(res.data);
       }
     } catch (err) {
       console.error(err);
-      setUser("public");
     }
   };
 

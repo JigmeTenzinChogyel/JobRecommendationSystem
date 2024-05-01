@@ -94,6 +94,7 @@ class Job(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jobs')
     title = models.CharField(max_length=200)
     description = models.TextField()
+    summary = models.CharField(max_length=300)
     min_salary = models.DecimalField(max_digits=10, decimal_places=2)
     max_salary = models.DecimalField(max_digits=10, decimal_places=2)
     experience = ArrayField(models.TextField(), null=True, blank=True)

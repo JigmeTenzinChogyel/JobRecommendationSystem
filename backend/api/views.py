@@ -171,7 +171,7 @@ class ResumeDeleteView(generics.DestroyAPIView):
 
 # get the current user resume
 class ResumeView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsSeeker]
     serializer_class = ResumeSerializer
 
     def get_object(self):
@@ -183,35 +183,11 @@ class ResumeView(generics.RetrieveAPIView):
 # Company
 class CompanyCreateView(generics.CreateAPIView):
     serializer_class = CompanySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsRecruiter]
 
-    def create(self, request, *args, **kwargs):
-        user = request.user
-        if user.user_role == "seeker":
-            return Response(
-                {"errors": "Seeker not allowd"},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-        if Company.objects.filter(user=user).exists():
-            return Response(
-                {"errors:": "You have already added a company"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
     def perform_create(self, serializer):
-        resume = serializer.save(user=self.request.user)
-        resume.save()
-
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = self.get_serializer_class()
-        kwargs['context'] = self.get_serializer_context()
-        return serializer_class(*args, **kwargs)
+        user = self.request.user
+        serializer.save(user=user)
 
 class CompanyUpdateView(generics.UpdateAPIView):
     serializer_class = CompanySerializer
@@ -254,6 +230,18 @@ class CompanyDeleteView(generics.DestroyAPIView):
         if instance.logo:
             default_storage.delete(instance.logo.path)
         instance.delete()
+
+class CompanyView(generics.RetrieveAPIView):
+    serializer_class = CompanySerializer
+    permission_classes = [IsAuthenticated, IsRecruiter]
+
+    def get_object(self):
+        try:
+            company = self.request.user.company
+            logger.info(f"Company: {company}")
+            return company
+        except Company.DoesNotExist:
+            raise NotFound("Company not found.")
 
 # Jobs
 # create job

@@ -10,8 +10,8 @@ function UserAvatar( { name, role }: Props ) {
         <Flex align='center' gap={4}>
             <Avatar size='sm' />
             <Box textAlign='left'>
-                <Text fontSize='sm' fontWeight='bold'>{name}</Text>
-                <Text fontSize='xs'>{role}</Text>
+                <Text fontSize='sm' fontWeight='bold'>{name || "user name"}</Text>
+                <Text fontSize='xs'>{role || "user role"}</Text>
             </Box>
         </Flex>
     )

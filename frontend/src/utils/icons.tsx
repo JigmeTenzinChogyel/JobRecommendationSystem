@@ -100,6 +100,7 @@ import {
 } from "react-icons/bi";
 import { BsTagFill } from "react-icons/bs";
 import { FaGithub, FaMoon, FaRegStar, FaStar, FaTwitter } from "react-icons/fa";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { FiBold, FiItalic, FiUnderline } from "react-icons/fi";
 import { HiOutlineEmojiHappy, HiOutlineMail } from "react-icons/hi";
 import { IoMdAttach } from "react-icons/io";
@@ -119,6 +120,8 @@ export const icons = {
   bold: FiBold,
   bookAdd: BiBookAdd,
   bookOpen: BiBookOpen,
+  bookMarked: FaBookmark,
+  bookMark: FaRegBookmark,
   calendar: BiCalendar,
   calendarAlt: BiCalendarAlt,
   check: BiCheck,

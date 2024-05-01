@@ -5,20 +5,20 @@ import Loading from "../../pages/Loading";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import NavDrawer from "./NavDrawer";
 import useLogout from "../../auth/useLogout";
-import useMe from "../../hooks/useMe";
 import {
     Link as ReactRouterLink,
     useNavigate,
   } from "react-router-dom";
   import { Link as ChakraLink } from "@chakra-ui/react";
 import useScroll from "../../hooks/useScroll";
+import { useAuth } from "../../providers/AuthProvider";
 
 function AuthNav() {
 
     const navigate = useNavigate()
     const { isScrolled } = useScroll();
     const { logout } = useLogout();
-    const { me: user, isLoading: meLoading } = useMe()
+    const { user, isLoading } = useAuth()
 
     return (
         <Flex
@@ -54,10 +54,10 @@ function AuthNav() {
           <Menu>
             <MenuButton cursor="pointer" px={3} py={1} _hover={{ background: "#222b43" }} borderRadius='md'>
               {
-                meLoading ?
+                isLoading ?
                   <Loading />
                   :
-                  <UserAvatar name={user.name} role={user.user_type} />
+                  <UserAvatar name={user?.name} role={user?.user_role} />
               }
             </MenuButton>
             <MenuList textColor='black'>

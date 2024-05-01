@@ -1,34 +1,27 @@
 import { useEffect, useState } from "react";
-import api from "../api";
-import { Me } from "../components/types/Types";
+import api from "../../api";
+import { MeResponse } from "./type";
+import { ME_URL } from "../../constants/url";
 
 function useMe() {
 
-    const [me, setMe] = useState<Me>({
-        id: 0,
-        name: "",
-        email: "",
-        user_type: "seeker",
-        created_at: "",
-        updated_at: "",
-    });
-    const [ isLoading, setIsLoading ] = useState(true)
+    const [me, setMe] = useState<MeResponse>();
+    const [ isLoading, setIsLoading ] = useState(false)
     
-
     useEffect(() => {
 
         const fetchMe = async () => {
             try {
-                const response = await api.get("/api/user/");
+                setIsLoading(true)
+                const response = await api.get(ME_URL);
                 if (response.status === 200) {
-                    setMe(response.data as Me);
+                    setMe(response.data as MeResponse);
                 }
             } catch (error) {
                 console.error(`Failed getting me: ${error}`);
             } finally {
                 setIsLoading(false)
             }
-
         }
 
         fetchMe();

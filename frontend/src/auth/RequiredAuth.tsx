@@ -2,7 +2,10 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 import Loading from "../pages/Loading";
 
-const RequireAuth = ({ allowedRoles }) => {
+type Props = {
+  allowedRoles: string[]
+}
+const RequireAuth = ({ allowedRoles }: Props ) => {
   const { user, isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
@@ -12,7 +15,7 @@ const RequireAuth = ({ allowedRoles }) => {
   }
 
   // Check if the user's role is included in the allowedRoles array
-  const isAllowed = allowedRoles?.includes(user);
+  const isAllowed = allowedRoles?.includes(user?.user_role || "");
 
   // Redirect logic based on user's role and authentication status
   return isAllowed ? (

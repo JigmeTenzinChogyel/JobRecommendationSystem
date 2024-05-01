@@ -1,9 +1,9 @@
 import { Flex, Icon, Text, IconButton } from "@chakra-ui/react";
-import { JobType } from "./JobType";
 import { FaBookmark, FaEye, FaMapMarkerAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { JobResponse } from "../../hooks/job";
 
-function JobList({id, title, location, salary, deadline }: JobType) {
+function JobList( job: JobResponse) {
   const navigate = useNavigate();
   return (
     <Flex
@@ -26,17 +26,17 @@ function JobList({id, title, location, salary, deadline }: JobType) {
         whiteSpace="nowrap"
         color="teal.600"
       >
-        {title}
+        {job.title}
       </Text>
-      <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
+      {/* <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
         <Icon as={FaMapMarkerAlt} color="teal.500" mr={2} />
         {location}
-      </Text>
+      </Text> */}
       <Text color="gray.600" fontSize={{ base: "xs", md: "sm" }} mr={4} whiteSpace="nowrap">
-        Salary: {salary}
+        Salary: {job.max_salary}
       </Text>
       <Text fontSize={{ base: "xs", md: "sm" }} color="gray.500" whiteSpace="nowrap">
-        Deadline: {`${deadline}`}
+        Deadline: {`${job.deadline}`}
       </Text>
       <Flex wrap='nowrap'>
       <IconButton
@@ -54,7 +54,7 @@ function JobList({id, title, location, salary, deadline }: JobType) {
         _hover={{ color: "teal.600" }}
         icon={<FaEye />}
         aria-label="details"
-        onClick={() => navigate(`${id}`)}
+        onClick={() => navigate(`${job.id}`)}
       />
       </Flex>
     </Flex>

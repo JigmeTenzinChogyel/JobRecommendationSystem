@@ -23,7 +23,7 @@ const JobWrapper = ({ children }) => {
     );
   }
 
-  if (user === "seeker") {
+  if (user?.user_role === "seeker") {
     return (
       <>
         <Hero

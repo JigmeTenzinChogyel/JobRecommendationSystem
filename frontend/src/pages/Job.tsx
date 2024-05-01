@@ -1,44 +1,25 @@
-import Hero from "../components/Hero/Hero";
-import { JobHeroData } from "../components/Hero/HeroData";
-import RandomJobs from "../components/job/Randomjobs";
-import RecommendedJobs from "../components/job/RecommendedJobs";
-import RecruiterJobList from "../components/job/RecruiterJobList";
-import useMeResume from "../hooks/useMeResume";
+import JobDisplay from "../components/job/JobDisplay";
+import RecruiterJob from "../components/job/recruiter/RecruiterJob";
 import { useAuth } from "../providers/AuthProvider";
 import Loading from "./Loading";
 
 const Job = () => {
+
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { resume } = useMeResume();
-  const isResume = resume?.resume_file;
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading />
   }
 
-  if (!isAuthenticated) {
-    return (
-      <>
-        <Hero {...JobHeroData} />
-        <RandomJobs />
-      </>
-    );
+  if(!user) {
+    return <>no user</>
   }
 
-  if (user === "seeker") {
-    return (
-      <>
-        <Hero {...JobHeroData} />
-        {isResume ? <RecommendedJobs /> : <RandomJobs />}
-      </>
-    );
+  if(user.user_role === "recruiter") {
+    return <RecruiterJob />
   }
-
   return (
-    <>
-      <Hero {...JobHeroData} />
-      <RecruiterJobList />
-    </>
+    <JobDisplay />
   );
 };
 

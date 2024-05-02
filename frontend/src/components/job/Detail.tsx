@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Heading,
@@ -10,99 +9,123 @@ import {
   Icon,
   Stack,
   Divider,
+  IconButton,
 } from '@chakra-ui/react';
-import { FaClock, FaMapMarkerAlt, FaMoneyBillWave } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
-import useJob from '../../hooks/useJob';
+import { FaMoneyBillWave } from 'react-icons/fa';
+import { JobResponse } from '../../hooks/job';
+import { useCompanyByUserId } from '../../hooks/company';
 import Loading from '../../pages/Loading';
+import { postDate } from '../../utils/postDate';
+import { icons } from '../../utils/icons';
+import { PublicCompanyDetails } from '../company/PublicCompanyDetails';
 
-const Detail: React.FC = () => {
-  const param = useParams()
-  const id = parseInt(param.id || "")
-  const { job, isLoading } = useJob({id});
+type Props = {
+  job: JobResponse;
+};
 
-  if(isLoading) {
-    return <Loading />
+const Detail = ({ job }: Props) => {
+  const { company, isLoading } = useCompanyByUserId(job.user);
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
-    <Box maxW="800px" mx="auto" p={6}>
-      <Heading as="h1" size="xl" mb={4}>
-        {job.title}
-      </Heading>
-      <Text mb={4}>{job.description}</Text>
-
-      <Flex alignItems="center" mb={4}>
-        <Icon as={FaMapMarkerAlt} mr={2} />
-        <Text fontWeight="bold">{job.location}</Text>
-      </Flex>
-
-      <Flex alignItems="center" mb={4}>
-        <Icon as={FaMoneyBillWave} mr={2} />
-        <Text fontWeight="bold">${job.salary}</Text>
-      </Flex>
-
-      <Flex alignItems="center" mb={4}>
-        <Icon as={FaClock} mr={2} />
-        <Text fontWeight="bold">Deadline: {job.deadline}</Text>
-      </Flex>
-
-      <Divider my={6} />
-
-      <Heading as="h2" size="md" mb={4}>
-        Requirements
-      </Heading>
-
-      <Stack spacing={4}>
+    <Flex w="80%" direction={{ base: 'column', md: 'row' }} justify="space-between" my="2%">
+      <Box flex="2.5" pr={{ base: 0, md: 8 }}>
+        <Heading as="h1" size="xl" mb={4} color="teal.600">
+          {job.title}
+        </Heading>
+        <Flex justify="space-between" align="center" mb={6}>
+          <Text fontSize="sm" color="gray.600">
+            {`Posted ${postDate(job.created_at)}`}
+          </Text>
+          <Flex>
+            {job.job_file && (
+              <Box mr={4}>
+                <IconButton
+                  aria-label="attachment"
+                  icon={<icons.attach />}
+                  variant="ghost"
+                  colorScheme="blue"
+                />
+              </Box>
+            )}
+            <Button colorScheme="teal" variant="outline">
+              Apply Now
+            </Button>
+          </Flex>
+        </Flex>
+        <Flex alignItems="center" mb={4}>
+          <Icon as={FaMoneyBillWave} color="teal.600" mr={2} />
+          <Text fontWeight="bold">{`${job.min_salary} - ${job.max_salary}`}</Text>
+        </Flex>
+        <Text fontWeight="bold" mb={4} color="gray.600">
+          Deadline: {job.deadline}
+        </Text>
+        <Text mb={6} color="gray.700">
+          {job.summary}
+        </Text>
+        <Divider my={6} />
         <Box>
-          <Text fontWeight="bold" mb={2}>
-            Experience:
+          <Heading as="h2" size="md" mb={4} color="teal.600">
+            Description
+          </Heading>
+          <Text mb={6} color="gray.700">
+            {job.description}
           </Text>
-          <UnorderedList>
-            {job.experience.map((exp, index) => (
-              <ListItem key={index}>{exp}</ListItem>
-            ))}
-          </UnorderedList>
         </Box>
-
-        <Box>
-          <Text fontWeight="bold" mb={2}>
-            Skills:
-          </Text>
-          <UnorderedList>
-            {job.skills.map((skill, index) => (
-              <ListItem key={index}>{skill}</ListItem>
-            ))}
-          </UnorderedList>
-        </Box>
-
-        <Box>
-          <Text fontWeight="bold" mb={2}>
-            Qualifications:
-          </Text>
-          <UnorderedList>
-            {job.qualification.map((qual, index) => (
-              <ListItem key={index}>{qual}</ListItem>
-            ))}
-          </UnorderedList>
-        </Box>
-      </Stack>
-
-      <Divider my={6} />
-
-      {job.job_file && (
-        <Box mb={6}>
-          <Text fontWeight="bold" mb={2}>
-            Job File:
-          </Text>
-          <Button as="a" href={job.job_file} target="_blank" colorScheme="blue">
-            View File
-          </Button>
-        </Box>
-      )}
-
-      <Button colorScheme="blue">Apply Now</Button>
-    </Box>
+        <Divider my={6} />
+        <Stack spacing={6}>
+          <Box>
+            <Heading as="h3" size="sm" mb={2} color="teal.600">
+              Experience:
+            </Heading>
+            <UnorderedList spacing={2}>
+              {job.experience && job.experience.length !== 0
+                ? job.experience.map((exp, index) => (
+                  <ListItem key={index} color="gray.700">
+                    {exp}
+                  </ListItem>
+                ))
+                : <Text color="gray.500">No Experience</Text>}
+            </UnorderedList>
+          </Box>
+          <Box>
+            <Heading as="h3" size="sm" mb={2} color="teal.600">
+              Qualifications:
+            </Heading>
+            <UnorderedList spacing={2}>
+              {job.qualification && job.qualification.length !== 0
+                ? job.qualification.map((qual, index) => (
+                  <ListItem key={index} color="gray.700">
+                    {qual}
+                  </ListItem>
+                ))
+                : <Text color="gray.500">No Qualifications</Text>}
+            </UnorderedList>
+          </Box>
+          <Box>
+            <Heading as="h3" size="sm" mb={2} color="teal.600">
+              Skills:
+            </Heading>
+            <UnorderedList spacing={2}>
+              {job.skills && job.skills.length !== 0
+                ? job.skills.map((skill, index) => (
+                  <ListItem key={index} color="gray.700">
+                    {skill}
+                  </ListItem>
+                ))
+                : <Text color="gray.500">No Skills</Text>}
+            </UnorderedList>
+          </Box>
+        </Stack>
+      </Box>
+      <Divider orientation='vertical' />
+      <Box flex="1" mt={{ base: 8, md: 0 }}>
+        <PublicCompanyDetails company={company} isLoading={isLoading}/>
+      </Box>
+    </Flex>
   );
 };
 

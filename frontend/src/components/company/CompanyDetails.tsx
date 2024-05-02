@@ -1,8 +1,8 @@
-import { Flex, Text, Box, Icon, IconButton, Tooltip, Image, Divider, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalHeader, ModalBody } from '@chakra-ui/react';
+import { Flex, Text, Box, Icon, IconButton, Tooltip, Image, Divider } from '@chakra-ui/react';
 import { FiEdit } from 'react-icons/fi';
 import { CompanyResponse } from '../../hooks/company/type';
-import CompanyForm from '../forms/CompanyForm';
 import Loading from '../../pages/Loading';
+import { NoCompany } from './NoCompany';
 
 type Props = {
   company?: CompanyResponse
@@ -10,14 +10,14 @@ type Props = {
 }
 const CompanyDetails = ({ company, isLoading }: Props) => {
 
-  if(isLoading) {
+  if (isLoading) {
     return <Loading />
   }
 
   if (!company) {
     return (
       <>
-        <NotCompany />
+        <NoCompany title={true}/>
       </>
     )
   }
@@ -56,28 +56,3 @@ const CompanyDetails = ({ company, isLoading }: Props) => {
 };
 
 export default CompanyDetails;
-
-const NotCompany = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  return (
-    <>
-      <Flex w="100%" direction="column" mb={4} px="3%" py="1%">
-        <Text fontWeight="bold" textColor="gray.600">Company Details</Text>
-        <Flex w="100%" direction="column" align="center" gap={3} mt={5}>
-          <Text>No Company!</Text>
-          <Button variant="outline" onClick={onOpen}>Add</Button>
-          <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={{base: "full", md: "xl"}}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader my={1}>Add Company</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody pb={4}>
-                <CompanyForm onClose={onClose}/>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
-        </Flex>
-      </Flex>
-    </>
-  )
-}

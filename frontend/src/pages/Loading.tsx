@@ -8,6 +8,7 @@ function Loading({ text = "Loading..." }) {
       minH="100vh"
       bg="gray.100"
       flexDirection="column"
+      w="100%"
     >
       <Spinner size="xl" color="blue.500" mb={4} />
       <Text fontWeight="semibold" color="gray.600">

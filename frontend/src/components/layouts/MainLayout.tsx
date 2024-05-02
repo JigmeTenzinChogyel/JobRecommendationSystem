@@ -9,7 +9,7 @@ function MainLayout() {
         <Flex direction="column" minH="100vh">
             <MainNav />
                 <HeroWrapper>
-                    <Flex flex="1 0 auto" justify="center">
+                    <Flex flex="1 0 auto" justify="center"> 
                         <Outlet />
                     </Flex>
                 </HeroWrapper>

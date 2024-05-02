@@ -23,7 +23,7 @@ export const useJobCreate = () => {
                 title: "Job posted successfully!",
                 status: "success"
             })
-            navigate(`confirm?id=${res.data.id}`)
+            navigate(`/job/confirm?id=${res.data.id}`)
             return res;
         } catch (err) {
             toast({

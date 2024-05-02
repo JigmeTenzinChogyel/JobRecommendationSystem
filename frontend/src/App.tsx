@@ -15,9 +15,9 @@ import FAQComponent from "./pages/FAQ";
 import Notification from "./pages/Notification";
 import JobDetail from "./pages/JobDetail";
 import Job from "./pages/Job";
-import PostJob from "./components/forms/JobForm";
 import PostResume from "./pages/PostResume";
 import ConfirmJob from "./pages/ConfirmJob";
+import JobPost from "./pages/JobPost";
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
 
             {/* Protected Route */}
             <Route element={<RequireAuth allowedRoles={[ROLES.RECRUITER]} />}>
-              <Route path="/job/post" element={<PostJob />} />
+              <Route path="/job/post" element={<JobPost />} />
               <Route path="/job/confirm" element={<ConfirmJob />} />
             </Route>
             {/* <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER]} />}> */}

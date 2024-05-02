@@ -12,6 +12,7 @@ type CompanyFragment = {
 }
 
 export type CompanyResponse = CompanyFragment
+export type CompanyByUserIdType = Pick <CompanyFragment, "user">
 
 export type CompanyCreateType = {
     name: string

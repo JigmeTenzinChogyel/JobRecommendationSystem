@@ -57,7 +57,7 @@ function AuthNav() {
                 isLoading ?
                   <Loading />
                   :
-                  <UserAvatar name={user?.name} role={user?.user_role} />
+                  <UserAvatar name={user?.name} role={user?.user_role} src={user?.avatar} />
               }
             </MenuButton>
             <MenuList textColor='black'>

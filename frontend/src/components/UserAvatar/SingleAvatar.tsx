@@ -21,13 +21,15 @@ import {
     Tooltip,
     useDisclosure,
 } from "@chakra-ui/react";
-import { MeResponse } from "../../hooks/user";
+import { MeResponse, useMeUpdate } from "../../hooks/user";
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
+import Loading from "../../pages/Loading";
 
 function SingleAvatar(user: MeResponse) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [file, setFile] = useState<File | null>(null);
+    const { updateMe, isLoading } = useMeUpdate();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -37,8 +39,16 @@ function SingleAvatar(user: MeResponse) {
 
     const handleFileUpload = async () => {
         console.log(file)
+        if (file !== null) {
+            await updateMe({ avatar: file });
+            onClose();
+            window.location.reload();
+        }
     }
 
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <Flex w="100%" position="relative" justify={{ base: "center", md: "left" }}>
@@ -69,7 +79,7 @@ function SingleAvatar(user: MeResponse) {
                         <ModalHeader>Update Avatar</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody pb={6}>
-                            <FormControl>
+                            <FormControl isRequired>
                                 <FormLabel>Avatar</FormLabel>
                                 <Input id="avatar" name="avatar" type="file" onChange={handleFileChange} />
                                 <FormHelperText>Update your profile avatar.</FormHelperText>
@@ -96,11 +106,22 @@ const Bio = (user: MeResponse) => {
 
     const [bio, setBio] = useState<string>(user.bio || "");
 
+    const { updateMe, isLoading } = useMeUpdate();
+
     const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBio(e.target.value);
     };
     const handleBioUpload = async () => {
         console.log(bio)
+        if (bio !== user.bio && bio !== "") {
+            await updateMe({ bio });
+            onClose()
+            window.location.reload();
+        }
+    }
+
+    if (isLoading) {
+        return <Loading />
     }
 
     return (
@@ -128,7 +149,7 @@ const Bio = (user: MeResponse) => {
                     <ModalHeader>Update Avatar</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                        <FormControl>
+                        <FormControl isRequired>
                             <FormLabel>Bio</FormLabel>
                             <Input
                                 id="bio"

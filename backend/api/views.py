@@ -231,6 +231,7 @@ class CompanyDeleteView(generics.DestroyAPIView):
             default_storage.delete(instance.logo.path)
         instance.delete()
 
+# logged in user company
 class CompanyView(generics.RetrieveAPIView):
     serializer_class = CompanySerializer
     permission_classes = [IsAuthenticated, IsRecruiter]
@@ -243,6 +244,42 @@ class CompanyView(generics.RetrieveAPIView):
         except Company.DoesNotExist:
             raise NotFound("Company not found.")
 
+# company from user id
+class CompanyViewByUserId(generics.RetrieveAPIView):
+    serializer_class = CompanySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        user_id = self.request.query_params.get('user_id')
+        if not user_id:
+            raise NotFound("User ID is required.")
+
+        try:
+            user = User.objects.get(id=user_id)
+            company = user.company
+            return company
+        except User.DoesNotExist:
+            raise NotFound("User not found.")
+        except Company.DoesNotExist:
+            raise NotFound("Company not found for the provided user.")
+
+
+class CompanyViewByCompanyId(generics.RetrieveAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            raise NotFound("Company ID is required.")
+
+        try:
+            company = Company.objects.get(id=pk)
+            return company
+        except Company.DoesNotExist:
+            raise NotFound("Company not found.")
+        
 # Jobs
 # create job
 class JobCreateView(generics.CreateAPIView):

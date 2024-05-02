@@ -1,32 +1,29 @@
 import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { JobUpdate } from "./type";
-import { JOB_UPDATE } from "../../constants/url";
 import api from "../../api";
+import { UserUpdate } from "./type";
+import { ME_UPDATE } from "../../constants/url";
 
-export const useJobUpdate = (id: number) => {
+export const useMeUpdate = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const toast = useToast();
-    const navigate = useNavigate();
 
-    const updateJob = async (input: JobUpdate) => {
+    const updateMe = async (input: UserUpdate) => {
         try {
             setIsLoading(true)
-            const res = await api.patch(JOB_UPDATE(id), input, {
+            const res = await api.patch(ME_UPDATE, input, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
             toast({
-                title: "Job updated successfully!",
+                title: "Success",
                 status: "success"
             })
-            navigate(`/job/${res.data.id}`)
             return res;
         } catch (err) {
             toast({
-                title: "Job updated failed!",
+                title: "Failed!",
                 status: "error"
             })
             console.error(err)
@@ -36,7 +33,7 @@ export const useJobUpdate = (id: number) => {
     };
 
     return {
-        updateJob,
+        updateMe,
         isLoading,
     }
 }

@@ -8,6 +8,8 @@ from .views import (
     CompanyUpdateView,
     CompanyDeleteView,
     CompanyView,
+    CompanyViewByUserId,
+    CompanyViewByCompanyId,
     JobCreateView,
     JobUpdateView, 
     JobDeleteView,
@@ -35,6 +37,9 @@ urlpatterns = [
     path('company/update/', CompanyUpdateView.as_view(), name='company_update'),
     path('company/delete/', CompanyDeleteView.as_view(), name='company_delete'),
     path('company/', CompanyView.as_view(), name='company'),
+    path('company/user', CompanyViewByUserId.as_view(), name='company-user-id'),
+    path('company/<int:pk>/', CompanyViewByCompanyId.as_view(), name='company'),
+
 
     # Job urls
     path('jobs/create/', JobCreateView.as_view(), name='job-create'),

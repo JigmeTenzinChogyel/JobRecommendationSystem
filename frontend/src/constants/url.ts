@@ -3,6 +3,7 @@ export const LOGIN_URL = "user/login/"
 export const REGISTER_URL = "user/register/"
 export const REFRESH_URL = "token/refresh/"
 export const ME_URL = "user/me/"
+export const ME_UPDATE = "user/update/"
 
 // resume services
 export const RESUME_CREATE = "resumes/create/"
@@ -24,3 +25,5 @@ export const COMPANY_CREATE = "company/create/"
 export const COMPANY_UPDATE = "company/update/"
 export const COMPANY_DELETE = "company/delete/"
 export const COMPANY_DETAIL = "company/"
+export const COMPANY_USER = "company/user"
+export const COMAPNY_ID = "company/<int:pk>/"

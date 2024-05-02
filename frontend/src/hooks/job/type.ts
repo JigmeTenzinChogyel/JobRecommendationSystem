@@ -6,11 +6,11 @@ type JobFragment = {
     description: string
     min_salary: number
     max_salary: number
-    experience: string[]
-    skills: string[]
-    qualification: string[]
+    experience?: string[]
+    skills?: string[]
+    qualification?: string[]
     deadline: string
-    job_file: string
+    job_file?: string
     created_at: string
     updated_at: string
 }
@@ -23,7 +23,7 @@ export type JobCreate = {
     description: string
     min_salary: number
     max_salary: number
-    job_file: File
+    job_file?: File
     deadline: Date
 }
 

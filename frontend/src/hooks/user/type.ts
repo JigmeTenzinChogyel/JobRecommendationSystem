@@ -10,3 +10,11 @@ type UserFragment = {
 }
 
 export type MeResponse = UserFragment;
+
+export type UserUpdate = {
+    email?: string
+    name?: string
+    user_role?: "seeker" | "recruiter"
+    bio?: string
+    avatar?: File
+}

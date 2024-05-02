@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Heading,
   Text,
   Button,
   IconButton,
@@ -16,7 +15,7 @@ type Props = {
   bookmark?: boolean
   handleBookmark?(): void
 }
-function JobCard({ job, bookmark, handleBookmark }: Props) {
+function JobCard({ job, bookmark = true, handleBookmark }: Props) {
   const navigate = useNavigate();
 
   if (!job) return;
@@ -40,15 +39,19 @@ function JobCard({ job, bookmark, handleBookmark }: Props) {
     >
       <Flex justifyContent="space-between" alignItems="center" mb={4} gap={4}>
         <Text size="xs" fontWeight="bold" color="teal.600">{job.title}</Text>
-        <IconButton
-          variant="ghost"
-          size="sm"
-          color="teal.500"
-          _hover={{ color: "teal.600" }}
-          icon={bookmark ? <icons.bookMarked /> : <icons.bookMark />}
-          aria-label="bookmark"
-          onClick={handleBookmark}
-        />
+        {
+          bookmark
+          &&
+          <IconButton
+            variant="ghost"
+            size="sm"
+            color="teal.500"
+            _hover={{ color: "teal.600" }}
+            icon={bookmark ? <icons.bookMarked /> : <icons.bookMark />}
+            aria-label="bookmark"
+            onClick={handleBookmark}
+          />
+        }
       </Flex>
       <Text
         mb={2}

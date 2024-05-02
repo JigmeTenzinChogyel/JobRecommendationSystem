@@ -52,7 +52,7 @@ const LoginForm: React.FC = () => {
                 {/* Email */}
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <FormControl isRequired isInvalid={errors.email ? true : false} mb={5}>
-                        <FormLabel color='gray.700'>Email</FormLabel>
+                        <FormLabel color='gray.700' fontSize="sm" >Email</FormLabel>
                         <Input
                             type="email"
                             id="email"
@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
 
                     {/* Password */}
                     <FormControl isRequired isInvalid={errors.password ? true : false} mb={5}>
-                        <FormLabel color='gray.700'>Password</FormLabel>
+                        <FormLabel color='gray.700' fontSize="sm">Password</FormLabel>
                         <InputGroup>
                             <Input
                                 id="password"

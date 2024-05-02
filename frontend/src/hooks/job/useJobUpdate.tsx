@@ -11,22 +11,35 @@ export const useJobUpdate = (id: number) => {
     const navigate = useNavigate();
 
     const updateJob = async (input: JobUpdate) => {
+        console.log(JOB_UPDATE(id))
+        console.log(JSON.stringify(input))
         try {
             setIsLoading(true)
-            const res = await api.patch(JOB_UPDATE(id), input, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            toast({
-                title: "Job updated successfully!",
-                status: "success"
-            })
-            navigate(`/job/${res.data.id}`)
-            return res;
+            if (!input.job_file) {
+                const res = await api.patch(JOB_UPDATE(id), input)
+                toast({
+                    title: "Success!",
+                    status: "success"
+                })
+                navigate(`/job/${res.data.id}`)
+                return res;
+            } else {
+                const res = await api.patch(JOB_UPDATE(id), input, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                toast({
+                    title: "Success!",
+                    status: "success"
+                })
+                navigate(`/job/${res.data.id}`)
+                return res;
+            }
+
         } catch (err) {
             toast({
-                title: "Job updated failed!",
+                title: "Failed!",
                 status: "error"
             })
             console.error(err)

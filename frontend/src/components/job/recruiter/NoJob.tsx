@@ -8,6 +8,7 @@ function NoJob() {
             <Heading>No Jobs Posted</Heading>
             <Button 
                 variant="outline"
+                colorScheme="teal"
                 onClick={() => navigate("post")}
             >
                 Post Job

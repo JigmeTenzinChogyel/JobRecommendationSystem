@@ -48,7 +48,7 @@ function MainNav() {
     >
       {/* Logo */}
       <Flex align="center" mr={5}>
-        <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
+        <Heading size={{base: "xs", md: "sm"}} letterSpacing={"-.1rem"}>
           <ChakraLink as={ReactRouterLink} to="/">
             JOBLESS
           </ChakraLink>

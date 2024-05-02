@@ -5,51 +5,60 @@ import { Link as ChakraLink } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import Navbar from "./Navbar";
 import useLogout from "../../auth/useLogout";
+import { useAuth } from "../../providers/AuthProvider";
+import Loading from "../../pages/Loading";
 
 type Props = {
     isAuthenticated?: boolean
 }
 
-function NavDrawer( { isAuthenticated }: Props ) {
+function NavDrawer({ isAuthenticated }: Props) {
+    const { user, isLoading } = useAuth()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { logout } = useLogout();
     const btnRef = React.useRef()
 
+    if (isLoading) {
+        return <Loading />
+    }
+
     if (isAuthenticated) {
         return (
             <>
-            <IconButton
-                aria-label="Toggle Menu"
-                ref={btnRef}
-                icon={<HamburgerIcon />}
-                display={{ base: "block", md: "none" }}
-                onClick={onOpen}
-                variant='none'
-            />
-            <Drawer
-                isOpen={isOpen}
-                placement='right'
-                onClose={onClose}
-                finalFocusRef={btnRef}
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader textAlign='center'>JOBLESS</DrawerHeader>
+                <IconButton
+                    aria-label="Toggle Menu"
+                    ref={btnRef}
+                    icon={<HamburgerIcon />}
+                    display={{ base: "block", md: "none" }}
+                    onClick={onOpen}
+                    variant='none'
+                />
+                <Drawer
+                    isOpen={isOpen}
+                    placement='right'
+                    onClose={onClose}
+                    finalFocusRef={btnRef}
+                >
+                    <DrawerOverlay />
+                    <DrawerContent>
+                        <DrawerCloseButton />
+                        <DrawerHeader textAlign='center'>JOBLESS</DrawerHeader>
 
-                    <DrawerBody textAlign='center'>
-                    <Avatar size='2xl' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' my={5} />
-                        <Navbar isAuthenticated={true}/>
-                    </DrawerBody>
+                        <DrawerBody textAlign='center'>
+                            {
+                                user && <Avatar size='2xl' name={user.name} src={user.avatar} my={5} />
+                            }
+                            <Navbar isAuthenticated={true} />
+                        </DrawerBody>
 
-                    <DrawerFooter>
-                        <Center height='30px' w='100%'>
-                            <Button onClick={() => logout()}>Log Out</Button>
-                        </Center>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-        </>
+                        <DrawerFooter>
+                            <Center height='30px' w='100%'>
+                                <Button onClick={() => logout()}>Log Out</Button>
+                            </Center>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </Drawer>
+            </>
         )
     }
 

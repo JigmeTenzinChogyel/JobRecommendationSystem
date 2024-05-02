@@ -80,7 +80,7 @@ class Company(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='company')
     name = models.CharField(max_length=100)
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
-    description = models.CharField(max_length=300)
+    description = models.TextField()
     city = models.CharField(max_length=30)
     country = models.CharField(max_length=30)
     logo = models.FileField(upload_to='logo/', null=True, blank=True)

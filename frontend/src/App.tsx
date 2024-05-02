@@ -15,9 +15,10 @@ import FAQComponent from "./pages/FAQ";
 import Notification from "./pages/Notification";
 import JobDetail from "./pages/JobDetail";
 import Job from "./pages/Job";
-import PostResume from "./pages/PostResume";
 import ConfirmJob from "./pages/ConfirmJob";
 import JobPost from "./pages/JobPost";
+import ConfirmResume from "./pages/ConfirmResume";
+import Resume from "./pages/Resume";
 
 function App() {
   return (
@@ -38,12 +39,15 @@ function App() {
               <Route path="/job/post" element={<JobPost />} />
               <Route path="/job/confirm" element={<ConfirmJob />} />
             </Route>
-            {/* <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER]} />}> */}
-              <Route path="/resume/post" element={<PostResume />} />
-            {/* </Route> */}
+            <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER]} />}>
+              {/* <Route path="/resume/update" element={<PostResume />} />
+               */}
+              <Route path="/resume/confirm" element={<ConfirmResume />} />
+            </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER, ROLES.RECRUITER]} />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/job/:id" element={<JobDetail />} />
+              <Route path="/resume/:id" element={<Resume />} />
               <Route path="/notification" element={<Notification />} />
             </Route>
 

@@ -1,6 +1,5 @@
 import { useJobs } from "../../hooks/job";
 import Loading from "../../pages/Loading";
-import JobToggleDisplay from "./JobToggleDisplay";
 
 function RandomJobs() {
     
@@ -9,7 +8,7 @@ function RandomJobs() {
         return <Loading />
     }
     return (
-        <JobToggleDisplay jobs={jobs} title="Jobs" />
+        <>random</>
     )
 }
 

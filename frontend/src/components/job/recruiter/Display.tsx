@@ -1,9 +1,8 @@
-import { Box, Flex, Grid, GridItem, IconButton, Text, Tooltip } from "@chakra-ui/react";
+import { Flex, Grid, GridItem, IconButton, Text, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaList, FaThLarge } from "react-icons/fa";
 import { JobResponse } from "../../../hooks/job";
 import JobCard from "../JobCard";
-import JobList from "../JobList";
 import { useNavigate } from "react-router-dom";
 import { icons } from "../../../utils/icons";
 
@@ -32,7 +31,7 @@ function Display({ jobs }: Props) {
                     </Tooltip>
                     <Tooltip label='toggle view' aria-label="toggle view" fontSize='md' bg='gray.50' color='teal.500' shadow='none'>
                         <IconButton
-                            icon={isCard ? <FaThLarge size="1.2em"/> : <FaList size="1.2em"/>}
+                            icon={isCard ? <FaThLarge size="1.2em" /> : <FaList size="1.2em" />}
                             aria-label="list or card toggle"
                             variant="ghost"
                             colorScheme="black"
@@ -41,24 +40,16 @@ function Display({ jobs }: Props) {
                     </Tooltip>
                 </Flex>
             </Flex>
-            {isCard ? (
-                <Grid
-                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
-                    gap={6}
-                >
-                    {jobs.map((job, index) => (
-                        <GridItem key={index}>
-                            <JobCard job={job} />
-                        </GridItem>
-                    ))}
-                </Grid>
-            ) : (
-                <Box>
-                    {jobs.map((job, index) => (
-                        <JobList {...job} key={index} />
-                    ))}
-                </Box>
-            )}
+            <Grid
+                templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                gap={6}
+            >
+                {jobs.map((job, index) => (
+                    <GridItem key={index}>
+                        <JobCard job={job} />
+                    </GridItem>
+                ))}
+            </Grid>
         </Flex>
     )
 }

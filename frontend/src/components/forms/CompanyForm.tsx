@@ -24,7 +24,6 @@ const CompanyForm = ({ onClose }: Props) => {
         console.log(data);
         await createCompany({...data, logo:data.logo[0]});
         onClose && onClose()
-        window.location.reload();
     };
 
     if (isLoading) {

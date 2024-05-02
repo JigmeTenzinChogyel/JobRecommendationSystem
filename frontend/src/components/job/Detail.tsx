@@ -48,6 +48,7 @@ const Detail = ({ job }: Props) => {
                   icon={<icons.attach />}
                   variant="ghost"
                   colorScheme="blue"
+                  onClick={() => window.open(job.job_file, '_blank')}
                 />
               </Box>
             )}
@@ -58,7 +59,7 @@ const Detail = ({ job }: Props) => {
         </Flex>
         <Flex alignItems="center" mb={4}>
           <Icon as={FaMoneyBillWave} color="teal.600" mr={2} />
-          <Text fontWeight="bold">{`${job.min_salary} - ${job.max_salary}`}</Text>
+          <Text fontWeight="bold">{`${Math.floor(job.min_salary)} - ${Math.floor(job.max_salary)}`}</Text>
         </Flex>
         <Text fontWeight="bold" mb={4} color="gray.600">
           Deadline: {job.deadline}

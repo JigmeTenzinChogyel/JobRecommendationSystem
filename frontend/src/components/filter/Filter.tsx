@@ -47,14 +47,15 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
 
     return (
         <Flex 
-            direction="column" 
-            w={{ base: "100%", md: "25%" }} 
             p={4} 
-            bg="gray.100"
             position='sticky'
+            bg="white"
             maxH='40vh'
+            top="8.2%"
+            zIndex="10"
+            gap={5}
+            px="2%"
             >
-            <Text fontSize="lg" mb={2}>Filter</Text>
             <Input
                 placeholder="Search"
                 name="search"
@@ -97,9 +98,9 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
                 <option value="internship">Internship</option>
                 <option value="remote">Remote</option>
             </Select>
-            <Flex justify="space-between">
-                <Button colorScheme="teal" onClick={applyFilters}>Apply</Button>
-                <Button onClick={clearFilters}>Clear</Button>
+            <Flex justify="space-between" gap={4}>
+                <Button colorScheme="teal" variant="outline" onClick={applyFilters}>Apply</Button>
+                <Button onClick={clearFilters} variant="outline">Clear</Button>
             </Flex>
         </Flex>
     );

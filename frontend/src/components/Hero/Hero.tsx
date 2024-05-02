@@ -12,7 +12,7 @@ type Props = {
 function Hero({ imageUrl, heading, subHeading, buttonName, handleClick, minH }: Props) {
     return (
         <Flex
-            minH={minH? minH : "20vh"}
+            minH={minH? minH : "19vh"}
             backgroundImage={`url('${imageUrl}')`}
             backgroundSize="cover"
             backgroundPosition="center"
@@ -32,12 +32,12 @@ function Hero({ imageUrl, heading, subHeading, buttonName, handleClick, minH }: 
             />
             <Flex zIndex={2} color="white" p={5} align='center' justify='center' direction='column' gap={6} textAlign='center'>
                 <Box>
-                    <Heading fontSize={{ base: "md", md: "lg", lg: "xl" }}>
+                    <Heading fontSize={{ base: "sm", md: "md", lg: "lg" }}>
                         {heading}
                     </Heading>
                     <Text
                         as="i"
-                        fontSize={{ base: "xs", md: "sm" }}
+                        fontSize={{ base: "8px", md: "xs" }}
                     >
                         {subHeading}
                     </Text>

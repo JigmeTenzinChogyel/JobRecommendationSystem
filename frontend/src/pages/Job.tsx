@@ -1,5 +1,5 @@
-import JobDisplay from "../components/job/JobDisplay";
 import RecruiterJob from "../components/job/recruiter/RecruiterJob";
+import SeekerJob from "../components/job/seeker/SeekerJob";
 import { useAuth } from "../providers/AuthProvider";
 import Loading from "./Loading";
 
@@ -19,7 +19,7 @@ const Job = () => {
     return <RecruiterJob />
   }
   return (
-    <JobDisplay />
+    <SeekerJob />
   );
 };
 

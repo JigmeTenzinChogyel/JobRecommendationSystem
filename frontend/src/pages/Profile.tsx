@@ -5,6 +5,8 @@ import { useCompany } from "../hooks/company";
 import { useAuth } from "../providers/AuthProvider";
 import Loading from "./Loading";
 import { Navigate } from "react-router-dom";
+import { useResume } from "../hooks/resume";
+import ResumeDetails from "../components/resume/ResumeDetails";
 
 function Profile() {
 
@@ -16,7 +18,7 @@ function Profile() {
     if (!user) {
         return <Navigate to="/" />
     }
-    
+
     return (
         <Flex w={{ base: "100%", md: "70%" }} direction="column" align="center" gap={4}>
             <SingleAvatar {...user} />
@@ -43,7 +45,11 @@ const Recruiter = () => {
 
 const Seeker = () => {
 
+    const { resume, isLoading } = useResume();
     return (
-        <>Seeker</>
+        <>
+            <Divider display={{ base: "none", md: "block" }} />
+            <ResumeDetails resume={resume} isLoading={isLoading} />
+        </>
     )
 }

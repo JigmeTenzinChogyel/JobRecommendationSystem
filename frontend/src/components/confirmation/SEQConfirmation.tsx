@@ -12,23 +12,31 @@ import {
 } from "@chakra-ui/react";
 import { useJobUpdate } from "../../hooks/job";
 import Loading from "../../pages/Loading";
+import { useUpdateResume } from "../../hooks/resume";
 
 type ISEQProps = {
     id: number
     experience: string[];
     skills: string[];
     qualification: string[];
+    isResume?: boolean
 };
 
-type SEQProps = Omit<ISEQProps, "id">
+type SEQProps = {
+    experience: string[];
+    skills: string[];
+    qualification: string[];
+}
 
 const SEQConfirmation = ({
     id,
     experience = [],
     skills = [],
     qualification = [],
+    isResume,
 }: ISEQProps) => {
     const { updateJob, isLoading } = useJobUpdate(id);
+    const { updateResume, isLoading: loading} = useUpdateResume();
     const [update, setUpdate] = useState<SEQProps>({
         experience,
         skills,
@@ -67,18 +75,21 @@ const SEQConfirmation = ({
 
     const handleConfirm = async () => {
         // Handle confirm logic here
-        console.log("Confirmed resume:", update);
-        await updateJob(update)
+        if(isResume) {
+            await updateResume({...update})
+        } else {
+            await updateJob({ ...update })
+        }
     };
 
-    if (isLoading) {
+    if (isLoading || loading) {
         return <Loading />
     }
 
     return (
         <Flex justify="center" px="5%" pt="3%" pb="4%" w={{ base: "100%", md: "60%" }} direction="column" gap={5}>
             <Box>
-                <Heading>Detail Confirmation</Heading>
+                <Heading textColor="teal">Confirmation</Heading>
                 <Text as="i" fontSize="sm" textColor="gray.500">This process helps with giving better recommendations.</Text>
             </Box>
             <Flex direction="column">
@@ -104,7 +115,7 @@ const SEQConfirmation = ({
                         value={newSkill}
                         onChange={(e) => setNewSkill(e.target.value)}
                     />
-                    <Button colorScheme="blue" onClick={() => handleAddItem("skills", newSkill)}>
+                    <Button colorScheme="blue" variant="outline" onClick={() => handleAddItem("skills", newSkill)}>
                         Add
                     </Button>
                 </Flex>
@@ -134,6 +145,7 @@ const SEQConfirmation = ({
                     />
                     <Button
                         colorScheme="blue"
+                        variant="outline"
                         onClick={() => handleAddItem("qualification", newQualification)}
                     >
                         Add
@@ -165,6 +177,7 @@ const SEQConfirmation = ({
                     />
                     <Button
                         colorScheme="blue"
+                        variant="outline"
                         onClick={() => handleAddItem("experience", newExperience)}
                     >
                         Add

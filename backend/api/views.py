@@ -178,7 +178,22 @@ class ResumeView(generics.RetrieveAPIView):
         try:
             return self.request.user.resume
         except Resume.DoesNotExist:
-            return None
+            raise NotFound("resume not found")
+        
+class ResumeById(generics.RetrieveAPIView):
+    queryset = Resume.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ResumeSerializer
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            raise NotFound("Resume ID is required")
+        try:
+            resume = Resume.objects.get(id=pk)
+            return resume
+        except Resume.DoesNotExist:
+            raise NotFound("Resume Not Found")
 
 # Company
 class CompanyCreateView(generics.CreateAPIView):

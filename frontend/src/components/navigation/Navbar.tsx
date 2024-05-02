@@ -21,6 +21,7 @@ function Navbar({ desktop, isAuthenticated }: Props) {
             flexGrow={1}
             gap={3}
             justifyContent="center"
+            fontSize="xs"
             flexDirection={{ base: "column", md: "row" }}
         >
             <ChakraLink

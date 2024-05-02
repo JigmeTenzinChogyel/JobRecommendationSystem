@@ -5,6 +5,7 @@ from .views import (
     ResumeDeleteView,
     ResumeView,
     ResumeById,
+    ResumeRecommendation,
     CompanyCreateView,
     CompanyUpdateView,
     CompanyDeleteView,
@@ -15,6 +16,7 @@ from .views import (
     JobUpdateView, 
     JobDeleteView,
     JobRecommendationView,
+    JobSimilarView,
     JobRetrieveAPIView, 
     RandomJobView,
     UserJobListView,
@@ -33,6 +35,7 @@ urlpatterns = [
     path('resumes/delete/', ResumeDeleteView.as_view(), name='resume-delete'),
     path('resumes/me/', ResumeView.as_view(), name='resume-me'),
     path('resumes/<int:pk>/', ResumeById.as_view(), name='resume-by-id'),
+    path('resumes/recommend', ResumeRecommendation.as_view(), name='resume-recommendation'),
 
     # Company urls
     path('company/create/', CompanyCreateView.as_view(), name='company_create'),
@@ -50,6 +53,7 @@ urlpatterns = [
     path('jobs/recommended/', JobRecommendationView.as_view(), name='job-recommendation'),
     path('jobs/<int:pk>/', JobRetrieveAPIView.as_view(), name='job-detail'),
     path('jobs/random/', RandomJobView.as_view(), name='random_job'),
+    path('jobs/similar', JobSimilarView.as_view(), name='similar_job'),
     path('jobs/user/', UserJobListView.as_view(), name='user_job_list'),
 
     # Application urls

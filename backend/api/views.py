@@ -30,7 +30,7 @@ from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from .permissions import IsRecruiter, IsSeeker
-from rest_framework.exceptions import ValidationError, NotFound
+from rest_framework.exceptions import ValidationError, NotFound, bad_request, server_error
 from django.db import transaction
 
 logger = logging.getLogger(__name__)
@@ -194,6 +194,57 @@ class ResumeById(generics.RetrieveAPIView):
             return resume
         except Resume.DoesNotExist:
             raise NotFound("Resume Not Found")
+
+# Resume Recommendation
+class ResumeRecommendation(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsRecruiter]
+    serializer_class = ResumeSerializer
+
+    def get_queryset(self):
+        job_text = self.get_job_text()
+        
+        if isinstance(job_text, Response):
+            return []
+        
+        resumes = Resume.objects.all()
+
+        if not resumes:
+            raise NotFound("Resume Not Found")
+        
+        recommend_resumes = self.recommend_resumes(job_text, resumes)
+        return recommend_resumes
+
+    def get_job_text(self):
+        job_id = self.request.query_params.get('job_id')
+        try:
+            job = Job.objects.get(id=job_id)
+            skills = ' '.join(job.skills) if job.skills else ''
+            experience = ' '.join(job.experience) if job.experience else ''
+            qualification = ' '.join(job.qualification) if job.qualification else ''
+            job_text = ' '.join([skills, experience, qualification])
+            return job_text
+        except Job.DoesNotExist:
+            raise NotFound("Job Not Found")
+
+    def recommend_resumes(self, job_text, resumes):
+        resume_texts = []
+        for resume in resumes:
+            skills = ' '.join(resume.skills) if resume.skills else ''
+            experience = ' '.join(resume.experience) if resume.experience else ''
+            qualification = ' '.join(resume.qualification) if resume.qualification else ''
+            resume_text = ' '.join([skills, experience, qualification])
+            resume_texts.append(resume_text)
+        logger.info(resume_texts)
+        vectorizer = CountVectorizer()
+        resume_vector = vectorizer.fit_transform(resume_texts)
+        job_vector = vectorizer.transform([job_text])
+
+        similarities = cosine_similarity(job_vector, resume_vector)
+        resume_indices = similarities.argsort()[0][::-1]
+        resume_indices = resume_indices.tolist()
+
+        recommended_resumes = [resumes[index] for index in resume_indices]
+        return recommended_resumes
 
 # Company
 class CompanyCreateView(generics.CreateAPIView):
@@ -480,6 +531,65 @@ class JobRecommendationView(generics.ListAPIView):
 
         recommended_jobs = [jobs[index] for index in job_indices]
         return recommended_jobs
+
+# similar jobs
+class JobSimilarView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        job_id = self.request.query_params.get('job_id')
+        job_text = self.get_job_text(job_id)
+
+        if isinstance(job_text, Response):
+            return []  # Return an empty list if there is an error with the resume
+
+        try:
+            jobs = Job.objects.filter(deadline__gte=timezone.now().date()).exclude(id=job_id if job_id else None)        
+        except Exception as e:
+            raise server_error(f"Error retrieving jobs: {str(e)}")
+
+        if not jobs:
+            raise NotFound("No active jobs found")
+        
+        similar_jobs = self.similar_jobs(job_text, jobs)
+        return similar_jobs
+
+    def get_job_text(self, job_id):
+        try:
+            job = Job.objects.get(id=job_id)
+        except Job.DoesNotExist:
+            raise NotFound("Job Not Found")
+
+        skills = ' '.join(job.skills) if job.skills else ''
+        experience = ' '.join(job.experience) if job.experience else ''
+        qualification = ' '.join(job.qualification) if job.qualification else ''
+        job_text = ' '.join([skills, experience, qualification])
+
+        if not job_text:
+            raise bad_request("Your job doesn't have any skills, experience, or qualifications")
+
+        return job_text
+
+    def similar_jobs(self, job_text, jobs):
+        job_texts = []
+        for job in jobs:
+            skills = ' '.join(job.skills) if job.skills else ''
+            experience = ' '.join(job.experience) if job.experience else ''
+            qualification = ' '.join(job.qualification) if job.qualification else ''
+            job_text = ' '.join([skills, experience, qualification])
+            job_texts.append(job_text)
+        
+        vectorizer = CountVectorizer()
+        similar_job_vector= vectorizer.fit_transform(job_texts)
+        job_vectors = vectorizer.transform([job_text])
+
+        similarities = cosine_similarity(job_vectors, similar_job_vector)
+        job_indices = similarities.argsort()[0][::-1]
+        job_indices = job_indices.tolist()
+
+        similar_jobs = [jobs[index] for index in job_indices]
+        return similar_jobs
 
 # random list of jobs 
 class RandomJobView(generics.ListAPIView):

@@ -6,6 +6,7 @@ from .views import (
     ResumeView,
     ResumeById,
     ResumeRecommendation,
+    ResumeByUserView,
     CompanyCreateView,
     CompanyUpdateView,
     CompanyDeleteView,
@@ -36,6 +37,7 @@ urlpatterns = [
     path('resumes/me/', ResumeView.as_view(), name='resume-me'),
     path('resumes/<int:pk>/', ResumeById.as_view(), name='resume-by-id'),
     path('resumes/recommend', ResumeRecommendation.as_view(), name='resume-recommendation'),
+    path('resumes/user', ResumeByUserView.as_view(), name='resume-by-user'),
 
     # Company urls
     path('company/create/', CompanyCreateView.as_view(), name='company_create'),

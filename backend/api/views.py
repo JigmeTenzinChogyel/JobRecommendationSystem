@@ -195,6 +195,26 @@ class ResumeById(generics.RetrieveAPIView):
         except Resume.DoesNotExist:
             raise NotFound("Resume Not Found")
 
+# resume by user
+class ResumeByUserView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ResumeSerializer
+
+    def get_object(self):
+        user_id = self.request.query_params.get('user_id')
+        if not user_id:
+            raise NotFound("User ID is required!")
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise NotFound("user not found")
+        try:
+            resume = Resume.objects.get(user=user)
+            return resume
+        except Resume.DoesNotExist:
+            raise NotFound("Resume Not Found")
+
+
 # Resume Recommendation
 class ResumeRecommendation(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsRecruiter]

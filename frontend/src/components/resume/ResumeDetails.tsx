@@ -1,4 +1,4 @@
-import { AbsoluteCenter, Box, Divider, Heading, Link, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Divider, Flex, Heading, Link, Stack, Tag, TagLabel, Text } from "@chakra-ui/react";
 import { resumeResponseType } from "../../hooks/resume";
 import Loading from "../../pages/Loading";
 import NoResume from "./NoResume";
@@ -42,43 +42,43 @@ export const Detail = (resume: resumeResponseType) => {
                 <Heading as="h3" size="sm" mb={2} color="teal.600">
                     Experience:
                 </Heading>
-                <UnorderedList spacing={2}>
+                <Flex flexWrap="wrap" gap={2}>
                     {resume.experience && resume.experience.length !== 0
                         ? resume.experience.map((exp, index) => (
-                            <ListItem key={index} color="gray.700">
-                                {exp}
-                            </ListItem>
+                            <Tag size="md" key={index} variant='outline' textColor="black" colorScheme='teal'>
+                                <TagLabel>{exp}</TagLabel>
+                            </Tag>
                         ))
                         : <Text color="gray.500">No Experience</Text>}
-                </UnorderedList>
+                </Flex>
             </Box>
             <Box>
                 <Heading as="h3" size="sm" mb={2} color="teal.600">
                     Qualifications:
                 </Heading>
-                <UnorderedList spacing={2}>
+                <Flex flexWrap="wrap" gap={2}>
                     {resume.qualification && resume.qualification.length !== 0
                         ? resume.qualification.map((qual, index) => (
-                            <ListItem key={index} color="gray.700">
-                                {qual}
-                            </ListItem>
+                            <Tag size="md" key={index} variant='outline' textColor="black" colorScheme='teal'>
+                                <TagLabel>{qual}</TagLabel>
+                            </Tag>
                         ))
                         : <Text color="gray.500">No Qualifications</Text>}
-                </UnorderedList>
+                </Flex>
             </Box>
             <Box>
                 <Heading as="h3" size="sm" mb={2} color="teal.600">
                     Skills:
                 </Heading>
-                <UnorderedList spacing={2}>
+                <Flex flexWrap="wrap" gap={2}>
                     {resume.skills && resume.skills.length !== 0
                         ? resume.skills.map((skill, index) => (
-                            <ListItem key={index} color="gray.700">
-                                {skill}
-                            </ListItem>
+                            <Tag size="md" key={index} variant='outline' textColor="black" colorScheme='teal'>
+                                <TagLabel>{skill}</TagLabel>
+                            </Tag>
                         ))
                         : <Text color="gray.500">No Skills</Text>}
-                </UnorderedList>
+                </Flex>
             </Box>
             <Box position='relative' padding='10'>
                 <Divider />

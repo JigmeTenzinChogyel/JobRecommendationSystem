@@ -4,6 +4,7 @@ export const REGISTER_URL = "user/register/"
 export const REFRESH_URL = "token/refresh/"
 export const ME_URL = "user/me/"
 export const ME_UPDATE = "user/update/"
+export const USER = (id: number) => `user/${id}/`
 
 // resume services
 export const RESUME_CREATE = "resumes/create/"
@@ -11,6 +12,8 @@ export const RESUME_UPDATE = "resumes/update/"
 export const RESUME_DELETE = "resumes/delete/"
 export const RESUME_ME = "resumes/me/"
 export const RESUME_ID = (id: number) => `resumes/${id}/`;
+export const RESUME_RECOMMENDATION = "resumes/recommend"
+export const RESUME_USER = "resumes/user"
 
 // job services
 export const JOB_CREATE = "jobs/create/"

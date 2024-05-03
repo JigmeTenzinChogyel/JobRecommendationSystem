@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { JobResponse } from "../../hooks/job";
 import { icons } from "../../utils/icons"
 import { postDate } from "../../utils/postDate";
+import { useAuth } from "../../providers/AuthProvider";
 
 type Props = {
   job?: JobResponse
@@ -16,6 +17,7 @@ type Props = {
   handleBookmark?(): void
 }
 function JobCard({ job, bookmark = true, handleBookmark }: Props) {
+  const { user } = useAuth()
   const navigate = useNavigate();
 
   if (!job) return;
@@ -30,17 +32,14 @@ function JobCard({ job, bookmark = true, handleBookmark }: Props) {
       position="relative"
       transition="transform 0.3s ease"
       _hover={{ transform: "translateY(-3px)" }}
-      // minW="200px"
-      // maxW="300px"
       minH="250px"
-      // maxH="250px"
       display="flex"
       flexDirection="column"
     >
       <Flex justifyContent="space-between" alignItems="center" mb={4} gap={4}>
         <Text size="xs" fontWeight="bold" color="teal.600">{job.title}</Text>
         {
-          bookmark
+          user?.user_role === "seeker"
           &&
           <IconButton
             variant="ghost"

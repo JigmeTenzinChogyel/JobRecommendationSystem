@@ -28,7 +28,7 @@ export const useUpdateResume = () => {
             } else {
                 const res = await api.patch(RESUME_UPDATE, input);
                 toast({
-                    title: "Success!",
+                    title: "Failed!",
                     status: "error"
                 })
                 navigate(`/resume/${res.data.id}`)

@@ -19,6 +19,7 @@ import ConfirmJob from "./pages/ConfirmJob";
 import JobPost from "./pages/JobPost";
 import ConfirmResume from "./pages/ConfirmResume";
 import UserResume from "./pages/UserResume";
+import Bookmark from "./pages/Bookmark";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <Route path="/job/confirm" element={<ConfirmJob />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER]} />}>
+              <Route path="/bookmark" element={<Bookmark />} />
               {/* <Route path="/resume/update" element={<PostResume />} />
                */}
               <Route path="/resume/confirm" element={<ConfirmResume />} />

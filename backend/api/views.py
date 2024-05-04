@@ -254,7 +254,6 @@ class ResumeRecommendation(generics.ListAPIView):
             qualification = ' '.join(resume.qualification) if resume.qualification else ''
             resume_text = ' '.join([skills, experience, qualification])
             resume_texts.append(resume_text)
-        logger.info(resume_texts)
         vectorizer = CountVectorizer()
         resume_vector = vectorizer.fit_transform(resume_texts)
         job_vector = vectorizer.transform([job_text])
@@ -622,25 +621,48 @@ class RandomJobView(generics.ListAPIView):
         queryset = self.get_queryset().order_by('?')
         random_job = get_object_or_404(queryset)
         return random_job
-    
+
+# bookmarked jobs
+class JobByBookmark(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsSeeker]
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        try:
+            bookmarks = Bookmark.objects.filter(user=user)
+        except:
+            raise NotFound("No Bookmarks")
+        jobs = []
+        for bookmark in bookmarks:
+            try:
+                job = Job.objects.get(id=bookmark.job.id)
+                jobs.append(job)
+            except Job.DoesNotExist:
+                raise NotFound("Job Not Found")
+        return jobs
+
 # Application
 class ApplicationCreateView(generics.CreateAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated, IsSeeker]
 
     def perform_create(self, serializer):
-        serializer.save(job_id=self.request.data.get('id'))
-        # Get the authenticated user
-        user = User.objects.get(id=self.request.user.id)
-        job_id=self.request.data.get('id')
-        job = Job.objects.get(id=job_id)
-        # Create a new notification
-        notification = Notification.objects.create(
-            user=user,
-            job=job,
-            message=f"{user.name} applied for the job {job.title}"
-        )
-        notification.save()
+        with transaction.atomic():
+            user = self.request.user
+            job_id = self.request.data.get('job_id')
+            if not job_id:
+                raise bad_request("Job ID required")
+            job = get_object_or_404(Job, id=job_id)
+            serializer.save(user=user, job=job)
+
+            # Create a new notification
+            notification = Notification.objects.create(
+                user=user,
+                job=job,
+                message=f"{user.name} applied for the job {job.title}"
+            )
+            notification.save()
 
 class ApplicationUpdateView(generics.UpdateAPIView):
     queryset = Application.objects.all()
@@ -674,6 +696,70 @@ class ApplicationUpdateView(generics.UpdateAPIView):
                 )
                 notification.save()
 
+class ApplicationDeleteView(generics.DestroyAPIView):
+    permission_classes = [ IsAuthenticated, IsSeeker ]
+    serializer_class = ApplicationSerializer
+
+    def get_object(self):
+        try:
+            app_id = self.kwargs.get('pk')
+            app = Application.objects.get(id=app_id)
+            return app
+        except Application.DoesNotExist:
+            raise NotFound("Application Not Found")
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+# get application from job and user
+class ApplicationByJobAndUser(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated, IsSeeker]
+    serializer_class = ApplicationSerializer
+
+    def get_object(self):
+        user = self.request.user
+        job_id = self.request.query_params.get('job_id')
+        job = self.get_job(job_id)
+        return self.get_application(user, job)
+
+    def get_job(self, job_id):
+        try:
+            job = Job.objects.get(id=job_id)
+            return job
+        except Job.DoesNotExist:
+            raise NotFound("Job Not Found")
+        
+    def get_application(self, user, job):
+        try:
+            application = Application.objects.get(user=user, job=job)
+            return application
+        except Application.DoesNotExist:
+            raise NotFound("Application Not Found")
+
+# all the application for the job
+class ApplicationsByJob(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsRecruiter]
+    serializer_class = ApplicationSerializer
+
+    def get_queryset(self):
+        job_id = self.request.query_params.get('job_id')
+        job = self.get_job(job_id)
+        return self.get_application(job)
+
+    def get_job(self, job_id):
+        try:
+            job = Job.objects.get(id=job_id)
+            return job
+        except Job.DoesNotExist:
+            raise NotFound("Job Not Found")
+        
+    def get_application(self, job):
+        try:
+            applications = Application.objects.filter(job=job)
+            return applications
+        except Application.DoesNotExist:
+            raise NotFound("Application Not Found")
+
 # Bookmark
 # create
 class BookmarkCreateView(generics.CreateAPIView):
@@ -681,7 +767,7 @@ class BookmarkCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, IsSeeker]
 
     def perform_create(self, serializer):
-        serializer.save(job_id=self.request.data.get('id'))
+        serializer.save(job_id=self.request.data.get('job_id'))
 
 # delete
 class BookmarkDeleteView(generics.DestroyAPIView):
@@ -699,18 +785,25 @@ class BookmarkDeleteView(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         instance.delete()
 
-# get the bookmark for the current user and the job
-class BookmarkFromJobView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Bookmark.objects.all()
+# get bookmark
+class BookmarkByJobView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated, IsSeeker]
     serializer_class = BookmarkSerializer
-
+        
     def get_object(self):
         user = self.request.user
-        job_id = self.kwargs.get('job_id')
-
+        job_id = self.request.query_params.get("job_id")
+        if not job_id:
+            raise bad_request("Job ID required!")
+        
+        # get job
         try:
-            bookmark = Bookmark.objects.get(user=user, job_id=job_id)
+            job = Job.objects.get(id=job_id)
+        except:
+            raise NotFound("Job Not Found!")
+        
+        try:
+            bookmark = Bookmark.objects.get(job=job, user=user)
             return bookmark
-        except Bookmark.DoesNotExist:
-            raise NotFound("Job Not Found")
+        except:
+            raise NotFound("Bookmark Not Found!")

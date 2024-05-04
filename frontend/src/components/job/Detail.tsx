@@ -21,6 +21,8 @@ import Uploader from '../UserAvatar/Uploader';
 import { useAuth } from '../../providers/AuthProvider';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { ResumeRecommendation } from '../resume/ResumeRecommendation';
+import { useApplicationByJob, useApplicationCreate, useApplicationDelete, useApplications } from '../../hooks/applications';
+import Applicants from '../UserAvatar/Applicants';
 
 type Props = {
   job: JobResponse;
@@ -29,7 +31,19 @@ type Props = {
 const Detail = ({ job }: Props) => {
 
   const { company, isLoading } = useCompanyByUserId(job.user);
+  const { application } = useApplicationByJob(job.id)
+  const { applications } = useApplications(job.id)
+  const { createApplication } = useApplicationCreate()
+  const { deleteApplication } = useApplicationDelete()
   const { user } = useAuth()
+
+  const handleApply = async () => {
+    if (application) {
+      await deleteApplication(application.id)
+    } else {
+      await createApplication({ job_id: job.id })
+    }
+  }
 
   return (
     <Flex w="80%" my="2%" direction="column">
@@ -52,8 +66,12 @@ const Detail = ({ job }: Props) => {
             {
               user?.user_role === "seeker"
               &&
-              <Button colorScheme="teal" variant="outline">
-                Apply Now
+              <Button
+                colorScheme="teal"
+                variant="outline"
+                onClick={handleApply}
+              >
+                {application ? "Applied" : "Apply"}
               </Button>
             }
           </Flex>
@@ -136,7 +154,13 @@ const Detail = ({ job }: Props) => {
       </Box>
       {
         user?.user_role === "recruiter" ?
-          <ResumeRecommendation id={job.id} /> :
+          <>
+            {
+              applications && applications.length !== 0 && <Applicants applications={applications}/>
+            }
+            <ResumeRecommendation id={job.id} />
+          </>
+          :
           <Box>Similar</Box>
       }
     </Flex>

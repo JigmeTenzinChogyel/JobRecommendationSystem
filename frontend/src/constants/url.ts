@@ -23,6 +23,7 @@ export const JOB_DETAIL = (id: number) => `jobs/${id}/`
 export const JOB_RECOMMENDATION = "jobs/recommended/"
 export const JOB_RANDOM = "jobs/random/"
 export const JOB_USER = "jobs/user/"
+export const JOB_BOOKMARK = "jobs/bookmark/"
 
 // company services
 export const COMPANY_CREATE = "company/create/"
@@ -31,3 +32,14 @@ export const COMPANY_DELETE = "company/delete/"
 export const COMPANY_DETAIL = "company/"
 export const COMPANY_USER = "company/user"
 export const COMAPNY_ID = "company/<int:pk>/"
+
+// bookmark services
+export const BOOKMARK_CREATE = "bookmarks/create/"
+export const BOOKMARK_DELETE = (id: number) => `bookmarks/${id}/delete/`
+export const BOOKMARK_JOB = "bookmarks/job"
+
+// application services
+export const APPLICATION_CREATE = "applications/create/"
+export const APPLICATION_DELETE = (id: number) => `applications/${id}/delete/`
+export const APPLICATION_JOB = "applications/job"
+export const APPLICATIONS = "applications"

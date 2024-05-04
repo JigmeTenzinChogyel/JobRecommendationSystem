@@ -18,14 +18,18 @@ from .views import (
     JobDeleteView,
     JobRecommendationView,
     JobSimilarView,
-    JobRetrieveAPIView, 
+    JobRetrieveAPIView,
+    JobByBookmark,
     RandomJobView,
     UserJobListView,
     ApplicationCreateView,
     ApplicationUpdateView,
+    ApplicationDeleteView,
+    ApplicationByJobAndUser,
+    ApplicationsByJob,
     BookmarkCreateView,
     BookmarkDeleteView,
-    BookmarkFromJobView,
+    BookmarkByJobView,
 )
 
 urlpatterns = [
@@ -47,7 +51,6 @@ urlpatterns = [
     path('company/user', CompanyViewByUserId.as_view(), name='company-user-id'),
     path('company/<int:pk>/', CompanyViewByCompanyId.as_view(), name='company'),
 
-
     # Job urls
     path('jobs/create/', JobCreateView.as_view(), name='job-create'),
     path('jobs/<int:pk>/update/', JobUpdateView.as_view(), name='job-update'),
@@ -57,14 +60,17 @@ urlpatterns = [
     path('jobs/random/', RandomJobView.as_view(), name='random_job'),
     path('jobs/similar', JobSimilarView.as_view(), name='similar_job'),
     path('jobs/user/', UserJobListView.as_view(), name='user_job_list'),
+    path('jobs/bookmark/', JobByBookmark.as_view(), name='jobs_by_bookmark'),
 
     # Application urls
     path('applications/create/', ApplicationCreateView.as_view(), name='application_create'),
     path('applications/<int:pk>/update/', ApplicationUpdateView.as_view(), name='application_update'),
+    path('applications/<int:pk>/delete/', ApplicationDeleteView.as_view(), name='application_delete'),
+    path('applications/job', ApplicationByJobAndUser.as_view(), name='application_by_job_and_user'),
+    path('applications', ApplicationsByJob.as_view(), name='applications_by_job'),
 
     # Bookmark urls
     path('bookmarks/create/', BookmarkCreateView.as_view(), name='bookmark_create'),
     path('bookmarks/<int:pk>/delete/', BookmarkDeleteView.as_view(), name='bookmark_delete'),
-    path('bookmarks/<int:job_id>/job/', BookmarkFromJobView.as_view(), name='bookmark_from_job'),
-
+    path('bookmarks/job', BookmarkByJobView.as_view(), name='bookmark_job'),
 ]

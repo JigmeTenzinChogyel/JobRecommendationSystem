@@ -10,16 +10,25 @@ import { JobResponse } from "../../hooks/job";
 import { icons } from "../../utils/icons"
 import { postDate } from "../../utils/postDate";
 import { useAuth } from "../../providers/AuthProvider";
+import { useBookmarkByJob, useBookmarkCreate, useBookmarkDelete } from "../../hooks/bookmark";
 
 type Props = {
-  job?: JobResponse
-  bookmark?: boolean
-  handleBookmark?(): void
+  job: JobResponse
 }
-function JobCard({ job, bookmark = true, handleBookmark }: Props) {
+function JobCard({ job }: Props) {
   const { user } = useAuth()
+  const { bookmark } = useBookmarkByJob(job?.id)
+  const { createBookmark } = useBookmarkCreate();
+  const { deleteBookmark } = useBookmarkDelete();
   const navigate = useNavigate();
 
+  const handleBookmark = async () => {
+    if (!bookmark) {
+      await createBookmark({ job_id: job.id })
+    } else {
+      await deleteBookmark(bookmark.id)
+    }
+  }
   if (!job) return;
 
   return (
@@ -72,7 +81,7 @@ function JobCard({ job, bookmark = true, handleBookmark }: Props) {
             variant="solid"
             size="xs"
             _hover={{ bg: "teal.600" }}
-            onClick={() => navigate(`${job.id}`)}
+            onClick={() => navigate(`/job/${job.id}`)}
           >
             Details
           </Button>

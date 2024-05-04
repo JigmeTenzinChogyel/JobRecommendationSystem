@@ -52,7 +52,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
             bg="white"
             maxH='40vh'
             top="8.2%"
-            zIndex="10"
+            zIndex="5"
             gap={5}
             px="2%"
             >

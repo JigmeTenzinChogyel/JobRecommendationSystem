@@ -62,6 +62,7 @@ function AuthNav() {
             </MenuButton>
             <MenuList textColor='black'>
               <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
+              <MenuItem onClick={() => navigate("/bookmark")}>Bookmarks</MenuItem>
               <MenuItem w="100%" onClick={logout} textAlign='center'>
                 Logout
               </MenuItem>

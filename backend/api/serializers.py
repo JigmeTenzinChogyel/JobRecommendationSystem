@@ -53,21 +53,6 @@ class ApplicationSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'job', 'application_status', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}, "job": {"read_only": True}}
-
-    def create(self, validated_data):
-        user = self.context['request'].user
-        job_id = self.context['request'].data.get('id')
-        # Ensure job exists and is valid
-        try:
-            job = Job.objects.get(id=job_id)
-        except:
-            raise serializers.ValidationError("Job not found")
-        if Application.objects.filter(user=user, job=job).exists():
-            raise serializers.ValidationError("You have already applied for this job")
-        if job.deadline < timezone.now().date():
-            raise serializers.ValidationError("Job deadline has passed")
-
-        return Application.objects.create(user=user, job=job, **validated_data)
     
 # Bookmark
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -78,7 +63,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        job_id = self.context['request'].data.get('id')
+        job_id = self.context['request'].data.get('job_id')
         # Ensure job exists and is valid
         try:
             job = Job.objects.get(id=job_id)

@@ -1,5 +1,6 @@
 type ResumeFragment = {
     id: number
+    user: number
     resume_file: string
     experience?: string[]
     skills?: string[]

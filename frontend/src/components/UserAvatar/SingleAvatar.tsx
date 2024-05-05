@@ -25,11 +25,13 @@ import { MeResponse, useMeUpdate } from "../../hooks/user";
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import Loading from "../../pages/Loading";
+import { useAuth } from "../../providers/AuthProvider";
 
 function SingleAvatar(user: MeResponse) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [file, setFile] = useState<File | null>(null);
     const { updateMe, isLoading } = useMeUpdate();
+    const { user: authUser } = useAuth();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -65,14 +67,18 @@ function SingleAvatar(user: MeResponse) {
             />
             <Flex w="100%" justify="space-between" py="2%" px="3%" direction={{ base: "column", md: "row" }} gap={3}>
                 <Box mt={{ base: "20%", md: "10%", lg: "4%" }} textAlign={{ base: "center", md: "left" }}>
-                    <Heading fontSize="xl" mb={2}>
+                    <Heading fontSize="xl" mt={3} mb={1}>
                         {user.name}
                     </Heading>
                     <Bio {...user} />
                 </Box>
-                <Button onClick={onOpen} variant="outline" colorScheme="teal">
-                    Change Profile
-                </Button>
+                {
+                    authUser?.user_role === "seeker"
+                    &&
+                    <Button onClick={onOpen} variant="outline" colorScheme="teal">
+                        Change Profile
+                    </Button>
+                }
                 <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
                     <ModalContent>
@@ -101,6 +107,8 @@ function SingleAvatar(user: MeResponse) {
 export default SingleAvatar;
 
 const Bio = (user: MeResponse) => {
+
+    const { user: authUser } = useAuth();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -133,16 +141,21 @@ const Bio = (user: MeResponse) => {
                         {user.bio}
                     </Text>
                     :
-                    <Text as="i" fontSize="sm" textColor="gray.500">Add Bio</Text>}
-            <Tooltip label="Edit" aria-label="Edit">
-                <IconButton
-                    icon={<Icon as={FiEdit} />}
-                    variant="ghost"
-                    colorScheme="blue"
-                    aria-label="Edit"
-                    onClick={onOpen}
-                />
-            </Tooltip>
+                    <Text as="i" fontSize="sm" textColor="gray.500">No Bio</Text>
+            }
+            {
+                authUser?.user_role === "seeker"
+                &&
+                <Tooltip label="Edit" aria-label="Edit">
+                    <IconButton
+                        icon={<Icon as={FiEdit} />}
+                        variant="ghost"
+                        colorScheme="blue"
+                        aria-label="Edit"
+                        onClick={onOpen}
+                    />
+                </Tooltip>
+            }
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

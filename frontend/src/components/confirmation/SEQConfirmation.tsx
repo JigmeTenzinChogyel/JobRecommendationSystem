@@ -13,6 +13,7 @@ import {
 import { useJobUpdate } from "../../hooks/job";
 import Loading from "../../pages/Loading";
 import { useUpdateResume } from "../../hooks/resume";
+import { useNavigate } from "react-router-dom";
 
 type ISEQProps = {
     id: number
@@ -35,6 +36,7 @@ const SEQConfirmation = ({
     qualification = [],
     isResume,
 }: ISEQProps) => {
+    const navigate = useNavigate();
     const { updateJob, isLoading } = useJobUpdate(id);
     const { updateResume, isLoading: loading} = useUpdateResume();
     const [update, setUpdate] = useState<SEQProps>({
@@ -77,6 +79,7 @@ const SEQConfirmation = ({
         // Handle confirm logic here
         if(isResume) {
             await updateResume({...update})
+            navigate("/profile")
         } else {
             await updateJob({ ...update })
         }

@@ -11,4 +11,8 @@ python-dotenv
 PyPDF2
 spacy
 scikit-learn
+# channels
+# redis
+# channels_redis
+# asgiref
 # spacy-transformers

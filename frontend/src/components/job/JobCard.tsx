@@ -9,15 +9,28 @@ import { useNavigate } from "react-router-dom";
 import { JobResponse } from "../../hooks/job";
 import { icons } from "../../utils/icons"
 import { postDate } from "../../utils/postDate";
+import { useAuth } from "../../providers/AuthProvider";
+import { useBookmarkByJob, useBookmarkCreate, useBookmarkDelete } from "../../hooks/bookmark";
 
 type Props = {
-  job?: JobResponse
-  bookmark?: boolean
-  handleBookmark?(): void
+  job: JobResponse
 }
-function JobCard({ job, bookmark = true, handleBookmark }: Props) {
+function JobCard({ job }: Props) {
+  const { user } = useAuth()
+  const { bookmark, setBookmark } = useBookmarkByJob(job?.id)
+  const { createBookmark } = useBookmarkCreate();
+  const { deleteBookmark } = useBookmarkDelete();
   const navigate = useNavigate();
 
+  const handleBookmark = async () => {
+    if (!bookmark) {
+      const res = await createBookmark({ job_id: job.id })
+      setBookmark(res?.data)
+    } else {
+      await deleteBookmark(bookmark.id)
+      setBookmark(undefined)
+    }
+  }
   if (!job) return;
 
   return (
@@ -30,17 +43,14 @@ function JobCard({ job, bookmark = true, handleBookmark }: Props) {
       position="relative"
       transition="transform 0.3s ease"
       _hover={{ transform: "translateY(-3px)" }}
-      // minW="200px"
-      // maxW="300px"
       minH="250px"
-      // maxH="250px"
       display="flex"
       flexDirection="column"
     >
       <Flex justifyContent="space-between" alignItems="center" mb={4} gap={4}>
         <Text size="xs" fontWeight="bold" color="teal.600">{job.title}</Text>
         {
-          bookmark
+          user?.user_role === "seeker"
           &&
           <IconButton
             variant="ghost"
@@ -73,7 +83,7 @@ function JobCard({ job, bookmark = true, handleBookmark }: Props) {
             variant="solid"
             size="xs"
             _hover={{ bg: "teal.600" }}
-            onClick={() => navigate(`${job.id}`)}
+            onClick={() => navigate(`/job/${job.id}`)}
           >
             Details
           </Button>

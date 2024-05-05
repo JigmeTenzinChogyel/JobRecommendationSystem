@@ -4,6 +4,7 @@ import Loading from "../../../pages/Loading";
 import RandomJobs from "../Randomjobs";
 import RecommendedJobs from "../RecommendedJobs";
 import NoResume from "../../resume/NoResume";
+import { PaginationProvider } from "../../../providers/PaginationProvider";
 
 function SeekerJob() {
 
@@ -24,7 +25,9 @@ function SeekerJob() {
     }
 
     return (
-        <RecommendedJobs />
+        <PaginationProvider>
+            <RecommendedJobs />
+        </PaginationProvider>
     )
 }
 

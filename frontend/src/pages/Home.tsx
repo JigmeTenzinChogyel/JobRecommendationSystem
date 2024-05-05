@@ -1,5 +1,11 @@
+import { Stats } from "../components/Hero/Stats";
+
 function Home() {
-  return <>home</>
+  return (
+    <>
+      <Stats />
+    </>
+  )
 }
 
 export default Home;

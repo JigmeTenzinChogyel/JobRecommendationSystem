@@ -32,6 +32,7 @@ from django.utils import timezone
 from .permissions import IsRecruiter, IsSeeker
 from rest_framework.exceptions import ValidationError, NotFound, bad_request, server_error
 from django.db import transaction
+from .pagination import CustomPagination
 
 logger = logging.getLogger(__name__)
 
@@ -484,6 +485,7 @@ class UserJobListView(generics.ListAPIView):
 class JobRecommendationView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = JobSerializer
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         user = self.request.user
@@ -580,10 +582,9 @@ class JobSimilarView(generics.ListAPIView):
         except Job.DoesNotExist:
             raise NotFound("Job Not Found")
 
-        skills = ' '.join(job.skills) if job.skills else ''
-        experience = ' '.join(job.experience) if job.experience else ''
-        qualification = ' '.join(job.qualification) if job.qualification else ''
-        job_text = ' '.join([skills, experience, qualification])
+        job_text = ' '.join([' '.join(job.skills) if job.skills else '',
+                              ' '.join(job.experience) if job.experience else '',
+                              ' '.join(job.qualification) if job.qualification else ''])
 
         if not job_text:
             raise bad_request("Your job doesn't have any skills, experience, or qualifications")
@@ -592,22 +593,20 @@ class JobSimilarView(generics.ListAPIView):
 
     def similar_jobs(self, job_text, jobs):
         job_texts = []
-        for job in jobs:
-            skills = ' '.join(job.skills) if job.skills else ''
-            experience = ' '.join(job.experience) if job.experience else ''
-            qualification = ' '.join(job.qualification) if job.qualification else ''
-            job_text = ' '.join([skills, experience, qualification])
+        for j in jobs:
+            job_text = ' '.join([' '.join(j.skills) if j.skills else '',
+                                  ' '.join(j.experience) if j.experience else '',
+                                  ' '.join(j.qualification) if j.qualification else ''])
             job_texts.append(job_text)
-        
+    
         vectorizer = CountVectorizer()
-        similar_job_vector= vectorizer.fit_transform(job_texts)
-        job_vectors = vectorizer.transform([job_text])
-
-        similarities = cosine_similarity(job_vectors, similar_job_vector)
-        job_indices = similarities.argsort()[0][::-1]
+        job_vectors = vectorizer.fit_transform(job_texts)
+        job_vector = vectorizer.transform([job_text])
+    
+        similarities = cosine_similarity(job_vector, job_vectors)
+        job_indices = (-similarities).argsort()[0]
         job_indices = job_indices.tolist()
-
-        similar_jobs = [jobs[index] for index in job_indices]
+        similar_jobs = [jobs[index] for index in job_indices[:4]]
         return similar_jobs
 
 # random list of jobs 
@@ -654,12 +653,13 @@ class ApplicationCreateView(generics.CreateAPIView):
             if not job_id:
                 raise bad_request("Job ID required")
             job = get_object_or_404(Job, id=job_id)
-            serializer.save(user=user, job=job)
+            app = serializer.save(user=user, job=job)
 
             # Create a new notification
             notification = Notification.objects.create(
                 user=user,
                 job=job,
+                application = app,
                 message=f"{user.name} applied for the job {job.title}"
             )
             notification.save()
@@ -697,19 +697,14 @@ class ApplicationUpdateView(generics.UpdateAPIView):
                 notification.save()
 
 class ApplicationDeleteView(generics.DestroyAPIView):
-    permission_classes = [ IsAuthenticated, IsSeeker ]
-    serializer_class = ApplicationSerializer
-
-    def get_object(self):
-        try:
-            app_id = self.kwargs.get('pk')
-            app = Application.objects.get(id=app_id)
-            return app
-        except Application.DoesNotExist:
-            raise NotFound("Application Not Found")
+    permission_classes = [IsAuthenticated, IsSeeker]
+    queryset = Application.objects.all()
 
     def perform_destroy(self, instance):
-        instance.delete()
+        with transaction.atomic():
+            notification = get_object_or_404(Notification, application=instance)
+            notification.delete()
+            instance.delete()
 
 # get application from job and user
 class ApplicationByJobAndUser(generics.RetrieveAPIView):

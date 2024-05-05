@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../../api";
 import { JOB_RECOMMENDATION } from "../../constants/url";
 import { JobResponse } from "./type";
 
-export const useJobRecommendation = () => {
+export const useJobRecommendation = (page?: number) => {
 
     const [jobs, setjobs] = useState<JobResponse[]>()
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        fetch();
-    }, [])
-
-    const fetch = async () => {
+    const fetchRecommendation = async () => {
         try {
             setIsLoading(true);
-            const res = await api.get(JOB_RECOMMENDATION);
+            const res = await api.get(JOB_RECOMMENDATION, {
+                params: {
+                    page
+                }
+            });
             if (res.status === 200) {
-                setjobs(res.data)
+                return res.data
             }
         } catch (err) {
             console.error(err);
@@ -27,7 +27,9 @@ export const useJobRecommendation = () => {
     }
 
     return {
+        fetchRecommendation,
         jobs,
-        isLoading
+        isLoading,
+        setjobs
     }
 }

@@ -23,6 +23,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { ResumeRecommendation } from '../resume/ResumeRecommendation';
 import { useApplicationByJob, useApplicationCreate, useApplicationDelete, useApplications } from '../../hooks/applications';
 import Applicants from '../UserAvatar/Applicants';
+import SimilarJobs from './SimilarJobs';
 
 type Props = {
   job: JobResponse;
@@ -31,7 +32,7 @@ type Props = {
 const Detail = ({ job }: Props) => {
 
   const { company, isLoading } = useCompanyByUserId(job.user);
-  const { application } = useApplicationByJob(job.id)
+  const { application, setApplication } = useApplicationByJob(job.id)
   const { applications } = useApplications(job.id)
   const { createApplication } = useApplicationCreate()
   const { deleteApplication } = useApplicationDelete()
@@ -40,8 +41,10 @@ const Detail = ({ job }: Props) => {
   const handleApply = async () => {
     if (application) {
       await deleteApplication(application.id)
+      setApplication(undefined)
     } else {
-      await createApplication({ job_id: job.id })
+      const res = await createApplication({ job_id: job.id })
+      setApplication(res?.data)
     }
   }
 
@@ -156,12 +159,12 @@ const Detail = ({ job }: Props) => {
         user?.user_role === "recruiter" ?
           <>
             {
-              applications && applications.length !== 0 && <Applicants applications={applications}/>
+              applications && applications.length !== 0 && <Applicants applications={applications} />
             }
             <ResumeRecommendation id={job.id} />
           </>
           :
-          <Box>Similar</Box>
+          <SimilarJobs id={job.id} />
       }
     </Flex>
   );

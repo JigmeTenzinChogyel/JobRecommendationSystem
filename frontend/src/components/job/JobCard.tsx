@@ -17,16 +17,18 @@ type Props = {
 }
 function JobCard({ job }: Props) {
   const { user } = useAuth()
-  const { bookmark } = useBookmarkByJob(job?.id)
+  const { bookmark, setBookmark } = useBookmarkByJob(job?.id)
   const { createBookmark } = useBookmarkCreate();
   const { deleteBookmark } = useBookmarkDelete();
   const navigate = useNavigate();
 
   const handleBookmark = async () => {
     if (!bookmark) {
-      await createBookmark({ job_id: job.id })
+      const res = await createBookmark({ job_id: job.id })
+      setBookmark(res?.data)
     } else {
       await deleteBookmark(bookmark.id)
+      setBookmark(undefined)
     }
   }
   if (!job) return;

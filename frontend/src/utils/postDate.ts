@@ -6,6 +6,7 @@ export const postDate = (input: string) => {
     const minute = 60 * 1000;
     const hour = 60 * minute;
     const day = 24 * hour;
+    const week = 7 * day;
   
     if (diff < minute) {
       const seconds = Math.floor(diff / 1000);
@@ -16,7 +17,11 @@ export const postDate = (input: string) => {
     } else if (diff < day) {
       const hours = Math.floor(diff / hour);
       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    } else {
+    } else if (diff < week) {
+      const days = Math.floor(diff / day);
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    }
+    else {
       const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
       return date.toLocaleDateString('en-US', options);
     }

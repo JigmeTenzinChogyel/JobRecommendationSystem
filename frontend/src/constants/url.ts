@@ -20,10 +20,11 @@ export const JOB_CREATE = "jobs/create/"
 export const JOB_UPDATE = (id: number) => `jobs/${id}/update/`
 export const JOB_DELETE = (id: number) => `jobs/${id}/delete/`
 export const JOB_DETAIL = (id: number) => `jobs/${id}/`
-export const JOB_RECOMMENDATION = "jobs/recommended/"
+export const JOB_RECOMMENDATION = "jobs/recommended"
 export const JOB_RANDOM = "jobs/random/"
 export const JOB_USER = "jobs/user/"
 export const JOB_BOOKMARK = "jobs/bookmark/"
+export const JOB_SIMILAR = "jobs/similar"
 
 // company services
 export const COMPANY_CREATE = "company/create/"

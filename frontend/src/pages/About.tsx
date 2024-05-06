@@ -1,6 +1,15 @@
+import { Heading, Stack } from "@chakra-ui/react";
+
 function About() {
     return (
-        <div>About</div>
+        <div>
+      <Stack>
+        <Heading as="h2" size="lg" my={5} textAlign="center">
+          About Us
+        </Heading>
+            
+      </Stack>
+    </div>
     )
 }
 

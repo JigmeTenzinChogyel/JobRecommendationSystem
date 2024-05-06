@@ -1,6 +1,6 @@
 import { Stat, StatGroup, StatLabel, StatNumber, Box } from "@chakra-ui/react"
 
-export const Stats = () => {
+export const  Stats = () => {
   return (
     <Box
       bg="gray.800"

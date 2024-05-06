@@ -610,16 +610,15 @@ class JobSimilarView(generics.ListAPIView):
         return similar_jobs
 
 # random list of jobs 
-class RandomJobView(generics.ListAPIView):
 
+class RandomJobView(generics.ListAPIView):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = [AllowAny]
 
-    def get_object(self):
-        queryset = self.get_queryset().order_by('?')
-        random_job = get_object_or_404(queryset)
-        return random_job
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by('?')[:8]
 
 # bookmarked jobs
 class JobByBookmark(generics.ListAPIView):

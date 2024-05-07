@@ -1,23 +1,29 @@
 import {
-  Stack,
-  Heading,
   AccordionItem,
   AccordionButton,
   Accordion,
   Box,
   AccordionIcon,
   AccordionPanel,
+  Flex,
+  Text,
 } from "@chakra-ui/react";
 
 function FAQComponent() {
   return (
-    <div>
-      <Stack spacing={3} px={10} my={5}>
-        <Heading as="h2" size="lg" my={5}  textAlign="center">
-          Frequently Asked Questions (FAQ)
-        </Heading>
-
-        <Accordion defaultIndex={[0]} allowMultiple width="900px">
+    <Flex
+      px="5%"
+      py={5}
+      pb="5%"
+      gap={10}
+      direction="column"
+      position="relative"
+      w={{ base: "100%", md: "75%" }}
+    >
+      <Text textAlign="center" fontSize={{ base: 'xl', md: '3xl', lg: '4xl' }} fontWeight="bold">
+        Frequently Asked Questions (FAQs)
+      </Text>
+      <Accordion defaultIndex={[0]} allowMultiple>
           <AccordionItem>
             <h2>
               <AccordionButton _expanded={{ bg: "teal.400", color: "white" }}>
@@ -44,7 +50,9 @@ function FAQComponent() {
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-            To edit your profile, you must be logged in first before you can access your account details. Then navigate to “Profile”, this will allow you to edit your details.
+              To edit your profile, you must be logged in first before you can
+              access your account details. Then navigate to “Profile”, this will
+              allow you to edit your details.
             </AccordionPanel>
           </AccordionItem>
 
@@ -58,8 +66,9 @@ function FAQComponent() {
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-             Navigate to 'Jobs' and click on 'Upload Resume'. Select our resume file and upload. 
-             *To upload your resume you must have selected 'Jobs' while registering.
+              Navigate to 'Jobs' and click on 'Upload Resume'. Select our resume
+              file and upload. *To upload your resume you must have selected
+              'Jobs' while registering.
             </AccordionPanel>
           </AccordionItem>
 
@@ -73,10 +82,11 @@ function FAQComponent() {
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-            Navigate to "Jobs". Click on 'Add' button and fill in your company details. After the page refreshes then click on 'Post Job' button, fill in the required information and click 'Submit Job'
+              Navigate to "Jobs". Click on 'Add' button and fill in your company
+              details. After the page refreshes then click on 'Post Job' button,
+              fill in the required information and click 'Submit Job'
             </AccordionPanel>
           </AccordionItem>
-
 
           <AccordionItem>
             <h2>
@@ -102,8 +112,7 @@ function FAQComponent() {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-      </Stack>
-    </div>
+    </Flex>
   );
 }
 

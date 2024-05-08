@@ -1,5 +1,6 @@
 import { Flex, Heading, Text, Box, Button } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Reveal } from "../animate/Reveal";
 
 type Props = {
     imageUrl: string;
@@ -39,28 +40,34 @@ function Hero({ imageUrl, heading, subHeading }: Props) {
                 />
                 <Flex zIndex={2} color="white" p={5} align='center' justify='center' direction='column' gap={6} textAlign='center'>
                     <Box>
-                        <Heading fontSize={{ base: "sm", md: "md", lg: "lg" }}>
-                            {heading}
-                        </Heading>
-                        <Text
-                            as="i"
-                            fontSize={{ base: "8px", md: "xs" }}
-                        >
-                            {subHeading}
-                        </Text>
+                        <Reveal width="100%">
+                            <Heading fontSize={{ base: "sm", md: "md", lg: "lg" }}>
+                                {heading}
+                            </Heading>
+                        </Reveal>
+                        <Reveal width="100%">
+                            <Text
+                                as="i"
+                                fontSize={{ base: "8px", md: "xs" }}
+                            >
+                                {subHeading}
+                            </Text>
+                        </Reveal>
                     </Box>
                     {
                         pathname === "/"
                         &&
-                        <Button
-                            onClick={handleStart}
-                            _hover={{ backgroundColor: "gray.800" }}
-                            variant='outline'
-                            color='white'
-                            fontSize={{ base: 'xs', md: 'sm' }}
-                        >
-                            Get Started
-                        </Button>
+                        <Reveal>
+                            <Button
+                                onClick={handleStart}
+                                _hover={{ backgroundColor: "gray.800" }}
+                                variant='outline'
+                                color='white'
+                                fontSize={{ base: 'xs', md: 'sm' }}
+                            >
+                                Get Started
+                            </Button>
+                        </Reveal>
                     }
                 </Flex>
             </Flex>
@@ -89,28 +96,34 @@ function Hero({ imageUrl, heading, subHeading }: Props) {
             />
             <Flex zIndex={2} color="white" p={5} align='center' justify='center' direction='column' gap={6} textAlign='center'>
                 <Box>
-                    <Heading fontSize={{ base: "sm", md: "md", lg: "lg" }}>
-                        {heading}
-                    </Heading>
-                    <Text
-                        as="i"
-                        fontSize={{ base: "8px", md: "xs" }}
-                    >
-                        {subHeading}
-                    </Text>
+                    <Reveal width="100%">
+                        <Heading fontSize={{ base: "sm", md: "md", lg: "lg" }}>
+                            {heading}
+                        </Heading>
+                    </Reveal>
+                    <Reveal width="100%">
+                        <Text
+                            as="i"
+                            fontSize={{ base: "8px", md: "xs" }}
+                        >
+                            {subHeading}
+                        </Text>
+                    </Reveal>
                 </Box>
                 {
                     pathname === "/"
                     &&
-                    <Button
-                        onClick={handleStart}
-                        _hover={{ backgroundColor: "gray.800" }}
-                        variant='outline'
-                        color='white'
-                        fontSize={{ base: 'xs', md: 'sm' }}
-                    >
-                        Get Started
-                    </Button>
+                    <Reveal>
+                        <Button
+                            onClick={handleStart}
+                            _hover={{ backgroundColor: "gray.800" }}
+                            variant='outline'
+                            color='white'
+                            fontSize={{ base: 'xs', md: 'sm' }}
+                        >
+                            Get Started
+                        </Button>
+                    </Reveal>
                 }
             </Flex>
         </Flex>

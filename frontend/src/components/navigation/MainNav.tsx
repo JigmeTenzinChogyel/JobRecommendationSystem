@@ -14,6 +14,7 @@ import NavDrawer from "./NavDrawer";
 import Navbar from "./Navbar";
 import { useAuth } from "../../providers/AuthProvider";
 import AuthNav from "./AuthNav";
+import { Reveal } from "../animate/Reveal";
 
 function MainNav() {
 
@@ -47,29 +48,35 @@ function MainNav() {
       zIndex={10}
     >
       {/* Logo */}
-      <Flex align="center" mr={5}>
-        <Heading size={{base: "xs", md: "sm"}} letterSpacing={"-.1rem"}>
-          <ChakraLink as={ReactRouterLink} to="/">
-            JOBLESS
-          </ChakraLink>
-        </Heading>
-      </Flex>
+      <Reveal from="x" hiddenValue={-40}>
+        <Flex align="center" mr={5}>
+          <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
+            <ChakraLink as={ReactRouterLink} to="/">
+              JOBLESS
+            </ChakraLink>
+          </Heading>
+        </Flex>
+      </Reveal>
 
       {/* Navigation Links */}
-      <Navbar desktop />
+      <Reveal hiddenValue={-20}>
+        <Navbar desktop />
+      </Reveal>
 
       {/* Sign In/Register Buttons */}
-      <Box display={{ base: 'none', md: 'block' }}>
-        <Center height='30px'>
-          <ChakraLink as={ReactRouterLink} to="/login" mx={4}>
-            Sign In
-          </ChakraLink>
-          <Divider orientation='vertical' borderColor={isScrolled ? 'teal.200' : 'white'} />
-          <ChakraLink as={ReactRouterLink} to="/register" mx={4}>
-            Register
-          </ChakraLink>
-        </Center>
-      </Box>
+      <Reveal from="x">
+        <Box display={{ base: 'none', md: 'block' }}>
+          <Center height='30px'>
+            <ChakraLink as={ReactRouterLink} to="/login" mx={4}>
+              Sign In
+            </ChakraLink>
+            <Divider orientation='vertical' borderColor={isScrolled ? 'teal.200' : 'white'} />
+            <ChakraLink as={ReactRouterLink} to="/register" mx={4}>
+              Register
+            </ChakraLink>
+          </Center>
+        </Box>
+      </Reveal>
 
       {/* Toggle Menu Button */}
       <NavDrawer />

@@ -1,30 +1,33 @@
-import { useInView, motion, useAnimation } from "framer-motion";
-import { useEffect, useRef } from "react"
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 interface Props {
     children: JSX.Element;
     width?: "fit-content" | "100%";
-    from?: "x" | "y"
+    from?: "x" | "y";
+    hiddenValue?: number
+    visibleValue?: number
 }
 
-export const Reveal = ({ children, width = "fit-content" }: Props) => {
+export const Reveal = ({ children, width = "fit-content", from = "y", hiddenValue = 75, visibleValue = 0 }: Props) => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true })
+    const isInView = useInView(ref, { once: true });
+
     const mainControls = useAnimation();
 
     useEffect(() => {
         if (isInView) {
-            mainControls.start("visible")
+            mainControls.start("visible");
         }
-    }, [isInView]);
+    }, [isInView, mainControls]);
 
     return (
         <motion.div
-            ref={ref} 
+            ref={ref}
             style={{ position: "relative", width, overflow: "hidden" }}
             variants={{
-                hidden: { opacity: 0, y: 75 },
-                visible: { opacity: 1, y: 0 },
+                hidden: { opacity: 0, [from === "y" ? "y" : "x"]: hiddenValue },
+                visible: { opacity: 1, [from === "y" ? "y" : "x"]: visibleValue },
             }}
             initial="hidden"
             animate={mainControls}
@@ -32,6 +35,5 @@ export const Reveal = ({ children, width = "fit-content" }: Props) => {
         >
             {children}
         </motion.div>
-    )
-
-}
+    );
+};

@@ -6,37 +6,39 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 import NavDrawer from "./NavDrawer";
 import useLogout from "../../auth/useLogout";
 import {
-    Link as ReactRouterLink,
-    useNavigate,
-  } from "react-router-dom";
-  import { Link as ChakraLink } from "@chakra-ui/react";
+  Link as ReactRouterLink,
+  useNavigate,
+} from "react-router-dom";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import useScroll from "../../hooks/useScroll";
 import { useAuth } from "../../providers/AuthProvider";
+import { Reveal } from "../animate/Reveal";
 
 function AuthNav() {
 
-    const navigate = useNavigate()
-    const { isScrolled } = useScroll();
-    const { logout } = useLogout();
-    const { user, isLoading } = useAuth()
+  const navigate = useNavigate()
+  const { isScrolled } = useScroll();
+  const { logout } = useLogout();
+  const { user, isLoading } = useAuth()
 
-    return (
-        <Flex
-        as="nav"
-        align="center"
-        justify="space-between"
-        wrap="wrap"
-        px='1rem'
-        py='0.5rem'
-        bg={isScrolled ? "#0A142F" : "transparent"}
-        textColor={isScrolled ? "teal.200" : "white"}
-        position="fixed"
-        top={0}
-        left={0}
-        right={0}
-        zIndex={10}
-      >
-        {/* Logo */}
+  return (
+    <Flex
+      as="nav"
+      align="center"
+      justify="space-between"
+      wrap="wrap"
+      px='1rem'
+      py='0.5rem'
+      bg={isScrolled ? "#0A142F" : "transparent"}
+      textColor={isScrolled ? "teal.200" : "white"}
+      position="fixed"
+      top={0}
+      left={0}
+      right={0}
+      zIndex={10}
+    >
+      {/* Logo */}
+      <Reveal from="x" hiddenValue={-40}>
         <Flex align="center" mr={5}>
           <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
             <ChakraLink as={ReactRouterLink} to="/">
@@ -44,11 +46,15 @@ function AuthNav() {
             </ChakraLink>
           </Heading>
         </Flex>
+      </Reveal>
 
-        {/* Navigation Links */}
+      {/* Navigation Links */}
+      <Reveal hiddenValue={-20}>
         <Navbar desktop />
+      </Reveal>
 
-        {/* User Avatar, Notification, and Logout */}
+      {/* User Avatar, Notification, and Logout */}
+      <Reveal from="x">
         <Flex align="center" display={{ base: "none", md: "flex" }} >
           <IconButton aria-label="Notifications" variant='none' _hover={{ background: "#222b43" }} onClick={() => navigate("/notification")} icon={<BellIcon w={6} h={6} />} mr={2} />
           <Menu>
@@ -71,12 +77,13 @@ function AuthNav() {
             </MenuList>
           </Menu>
         </Flex>
+      </Reveal>
+      
+      {/* Toggle Menu Button */}
+      <NavDrawer isAuthenticated={true} />
 
-        {/* Toggle Menu Button */}
-        <NavDrawer isAuthenticated={true} />
-
-      </Flex>
-    )
+    </Flex>
+  )
 }
 
 export default AuthNav;

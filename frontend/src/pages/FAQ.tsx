@@ -8,6 +8,7 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
+import { Reveal } from "../components/animate/Reveal";
 
 function FAQComponent() {
   return (
@@ -20,10 +21,13 @@ function FAQComponent() {
       position="relative"
       w={{ base: "100%", md: "75%" }}
     >
-      <Text textAlign="center" fontSize={{ base: 'xl', md: '3xl', lg: '4xl' }} fontWeight="bold">
-        Frequently Asked Questions (FAQs)
-      </Text>
+      <Reveal>
+        <Text textAlign="center" fontSize={{ base: 'xl', md: '3xl', lg: '4xl' }} fontWeight="bold">
+          Frequently Asked Questions (FAQs)
+        </Text>
+      </Reveal>
       <Accordion defaultIndex={[0]} allowMultiple>
+        <Reveal width="100%">
           <AccordionItem>
             <h2>
               <AccordionButton _expanded={{ bg: "teal.400", color: "white" }}>
@@ -39,7 +43,8 @@ function FAQComponent() {
               the “Register” form .
             </AccordionPanel>
           </AccordionItem>
-
+        </Reveal>
+        <Reveal width="100%">
           <AccordionItem>
             <h2>
               <AccordionButton _expanded={{ bg: "teal.400", color: "white" }}>
@@ -55,7 +60,8 @@ function FAQComponent() {
               allow you to edit your details.
             </AccordionPanel>
           </AccordionItem>
-
+        </Reveal>
+        <Reveal width="100%">
           <AccordionItem>
             <h2>
               <AccordionButton _expanded={{ bg: "teal.400", color: "white" }}>
@@ -71,7 +77,8 @@ function FAQComponent() {
               'Jobs' while registering.
             </AccordionPanel>
           </AccordionItem>
-
+        </Reveal>
+        <Reveal width="100%">
           <AccordionItem>
             <h2>
               <AccordionButton _expanded={{ bg: "teal.400", color: "white" }}>
@@ -87,7 +94,8 @@ function FAQComponent() {
               fill in the required information and click 'Submit Job'
             </AccordionPanel>
           </AccordionItem>
-
+        </Reveal>
+        <Reveal width="100%">
           <AccordionItem>
             <h2>
               <AccordionButton _expanded={{ bg: "teal.400", color: "white" }}>
@@ -111,7 +119,8 @@ function FAQComponent() {
               qualifications and the job requirements.
             </AccordionPanel>
           </AccordionItem>
-        </Accordion>
+        </Reveal>
+      </Accordion>
     </Flex>
   );
 }

@@ -54,10 +54,19 @@ function AuthNav() {
       </Reveal>
 
       {/* User Avatar, Notification, and Logout */}
-      <Reveal from="x">
-        <Flex align="center" display={{ base: "none", md: "flex" }} >
-          <IconButton aria-label="Notifications" variant='none' _hover={{ background: "#222b43" }} onClick={() => navigate("/notification")} icon={<BellIcon w={6} h={6} />} mr={2} />
-          <Menu>
+      <Flex align="center" display={{ base: "none", md: "flex" }} >
+        <Reveal from="x">
+          <IconButton
+            aria-label="Notifications"
+            variant='none'
+            _hover={{ background: "#222b43" }}
+            onClick={() => navigate("/notification")}
+            icon={<BellIcon w={6} h={6} />}
+            mr={2}
+          />
+        </Reveal>
+        <Menu>
+          <Reveal from="x">
             <MenuButton cursor="pointer" px={3} py={1} _hover={{ background: "#222b43" }} borderRadius='md'>
               {
                 isLoading ?
@@ -66,19 +75,19 @@ function AuthNav() {
                   <UserAvatar name={user?.name} role={user?.user_role} src={user?.avatar} />
               }
             </MenuButton>
-            <MenuList textColor='black'>
-              <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
-              {
-                user?.user_role === "seeker" && <MenuItem onClick={() => navigate("/bookmark")}>Bookmarks</MenuItem>
-              }
-              <MenuItem w="100%" onClick={logout} textAlign='center'>
-                Logout
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-      </Reveal>
-      
+          </Reveal>
+          <MenuList textColor='black'>
+            <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
+            {
+              user?.user_role === "seeker" && <MenuItem onClick={() => navigate("/bookmark")}>Bookmarks</MenuItem>
+            }
+            <MenuItem w="100%" onClick={logout} textAlign='center'>
+              Logout
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+
       {/* Toggle Menu Button */}
       <NavDrawer isAuthenticated={true} />
 

@@ -45,7 +45,7 @@ const RegisterForm: React.FC = () => {
                 Back to home
             </Link>
 
-            <Box w={{ base: "100%", md: "30%" }} h={{ base: "100%", md: "auto" }} bg="white" px="5%" py="2%" display="flex" justifyContent="center" alignItems="center" flexDirection="column" borderRadius="lg" shadow="lg">
+            <Box w={{ base: "100%", md: "30%" }} h={{ base: "100%", md: "auto" }} bg="white" px="5%" py="2%" display="flex" justifyContent="center" alignItems="center" flexDirection="column" borderRadius="sm" shadow="md">
                 <Text fontSize="xl" fontWeight="bold" color="gray.800" mb={5}>
                     Register
                 </Text>

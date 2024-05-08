@@ -26,38 +26,38 @@ export const Stats = () => {
                         mt="1%"
                         mb="2%"
                     >
-                        Our Impact
+                        Our results in numbers
                     </Text>
                 </Reveal>
                 <StatGroup flexDirection={{ base: "column", md: "row" }} textAlign="center" alignItems="center">
                     <Reveal>
                         <Stat>
-                            <StatLabel fontSize="medium" color="gray.400" fontWeight="medium" mb={1}>
-                                Users
-                            </StatLabel>
                             <StatNumber fontSize="xxx-large" fontWeight="bold" textColor="teal.500">
                                 {user_count}
                             </StatNumber>
+                            <StatLabel fontSize="medium" color="gray.400" fontWeight="medium" mb={1}>
+                                Users
+                            </StatLabel>
                         </Stat>
                     </Reveal>
                     <Reveal>
                         <Stat>
-                            <StatLabel fontSize="medium" color="gray.400" fontWeight="medium" mb={1}>
-                                Jobs
-                            </StatLabel>
                             <StatNumber fontSize="xxx-large" fontWeight="bold" textColor="teal.500">
                                 {job_count}
                             </StatNumber>
+                            <StatLabel fontSize="medium" color="gray.400" fontWeight="medium" mb={1}>
+                                Jobs
+                            </StatLabel>
                         </Stat>
                     </Reveal>
                     <Reveal>
                         <Stat>
-                            <StatLabel fontSize="medium" color="gray.400" fontWeight="medium" mb={1}>
-                                Companies
-                            </StatLabel>
                             <StatNumber fontSize="xxx-large" fontWeight="bold" textColor="teal.500">
                                 {company_count}
                             </StatNumber>
+                            <StatLabel fontSize="medium" color="gray.400" fontWeight="medium" mb={1}>
+                                Companies
+                            </StatLabel>
                         </Stat>
                     </Reveal>
                 </StatGroup>

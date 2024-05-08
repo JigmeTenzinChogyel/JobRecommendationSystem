@@ -33,6 +33,7 @@ export const COMPANY_DELETE = "company/delete/"
 export const COMPANY_DETAIL = "company/"
 export const COMPANY_USER = "company/user"
 export const COMAPNY_ID = "company/<int:pk>/"
+export const COMAPNIES = "companies/"
 
 // bookmark services
 export const BOOKMARK_CREATE = "bookmarks/create/"
@@ -44,3 +45,6 @@ export const APPLICATION_CREATE = "applications/create/"
 export const APPLICATION_DELETE = (id: number) => `applications/${id}/delete/`
 export const APPLICATION_JOB = "applications/job"
 export const APPLICATIONS = "applications"
+
+// stats services
+export const STATS = "stats/"

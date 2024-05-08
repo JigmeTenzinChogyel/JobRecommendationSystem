@@ -13,6 +13,7 @@ from .views import (
     CompanyView,
     CompanyViewByUserId,
     CompanyViewByCompanyId,
+    CompaniesView,
     JobCreateView,
     JobUpdateView, 
     JobDeleteView,
@@ -30,6 +31,7 @@ from .views import (
     BookmarkCreateView,
     BookmarkDeleteView,
     BookmarkByJobView,
+    StatsView,
 )
 
 urlpatterns = [
@@ -50,6 +52,7 @@ urlpatterns = [
     path('company/', CompanyView.as_view(), name='company'),
     path('company/user', CompanyViewByUserId.as_view(), name='company-user-id'),
     path('company/<int:pk>/', CompanyViewByCompanyId.as_view(), name='company'),
+    path('companies/', CompaniesView.as_view(), name='companies'),
 
     # Job urls
     path('jobs/create/', JobCreateView.as_view(), name='job-create'),
@@ -73,4 +76,8 @@ urlpatterns = [
     path('bookmarks/create/', BookmarkCreateView.as_view(), name='bookmark_create'),
     path('bookmarks/<int:pk>/delete/', BookmarkDeleteView.as_view(), name='bookmark_delete'),
     path('bookmarks/job', BookmarkByJobView.as_view(), name='bookmark_job'),
+
+    # Stat url
+    path('stats/', StatsView.as_view(), name='stats'),
+
 ]

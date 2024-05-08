@@ -41,7 +41,7 @@ const CompanyDetails = ({ company, isLoading }: Props) => {
           borderRadius='xl'
           boxSize='160px'
           src={company.logo}
-          alt='Dan Abramov'
+          alt={company.name}
         />
         <Flex w="100%" direction="column" gap={1} py="2px" textAlign={{ base: "center", md: "left" }}>
           <Text fontSize="lg">{company.name}</Text>

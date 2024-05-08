@@ -15,6 +15,7 @@ from .serializers import (
     ApplicationSerializer,
     NotificationSerializer,
     BookmarkSerializer,
+    StatsSerializer
 )
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -365,7 +366,16 @@ class CompanyViewByCompanyId(generics.RetrieveAPIView):
             return company
         except Company.DoesNotExist:
             raise NotFound("Company not found.")
-        
+
+class CompaniesView(generics.ListAPIView):
+    permission_classes = [ AllowAny ]
+    serializer_class = CompanySerializer
+
+    def get_queryset(self):
+        companies = Company.objects.all()
+        return companies
+
+
 # Jobs
 # create job
 class JobCreateView(generics.CreateAPIView):
@@ -801,3 +811,22 @@ class BookmarkByJobView(generics.RetrieveAPIView):
             return bookmark
         except:
             raise NotFound("Bookmark Not Found!")
+        
+
+# get stats
+class StatsView(generics.RetrieveAPIView):
+    permission_classes = [ AllowAny ]
+    serializer_class = StatsSerializer
+
+    def get_object(self):
+        user_count = User.objects.count()
+        job_count = Job.objects.count()
+        company_count = Company.objects.count()
+
+        stats = {
+            'user_count': user_count,
+            'job_count': job_count,
+            'company_count': company_count
+        }
+
+        return stats

@@ -82,3 +82,8 @@ class NotificationSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {"user": {"read_only": True}}
 
+# Stats
+class StatsSerializer(serializers.Serializer):
+    user_count = serializers.IntegerField()
+    job_count = serializers.IntegerField()
+    company_count = serializers.IntegerField()

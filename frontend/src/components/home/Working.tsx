@@ -1,4 +1,5 @@
 import { Card, CardBody, CardHeader, Grid, GridItem, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react"
+import { Reveal } from "../animate/Reveal"
 
 export const Working = () => {
 
@@ -42,75 +43,80 @@ export const Working = () => {
 
     return (
         <>
-            <Text
-                textAlign="center"
-                fontSize={{ base: "large", md: "larger" }}
-                fontWeight="bold"
-            >
-                How it Works
-            </Text>
-            <Tabs variant='enclosed-colored' colorScheme="teal" p={2}>
-                <TabList w="100%" justifyContent="center" gap={4}>
-                    <Tab>Seeker</Tab>
-                    <Tab>Recruiter</Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel>
-                        <Grid
-                            templateColumns={{
-                                base: "repeat(1, 1fr)",
-                                md: "repeat(4, 1fr)",
-                            }}
-                            gap={4}
-                        >
-                            {
-                                seeker.map((data, index) => (
-                                    <GridItem key={index}>
-                                        <Card
-                                            minH="180px"
-                                        >
-                                            <CardHeader>
-                                                <Text fontSize="xs">Step {index + 1}</Text>
-                                                <Text fontSize="sm" textColor="teal.400" fontWeight="semibold">{data.title}</Text>
-                                            </CardHeader>
-                                            <CardBody fontSize="xs" textColor="gray.600">
-                                                <Text>{data.desc}</Text>
-                                            </CardBody>
-                                        </Card>
-                                    </GridItem>
-                                ))
-                            }
-                        </Grid>
-                    </TabPanel>
-                    <TabPanel>
-                        <Grid
-                            templateColumns={{
-                                base: "repeat(1, 1fr)",
-                                md: "repeat(4, 1fr)",
-                            }}
-                            gap={4}
-                        >
-                            {
-                                recruiter.map((data, index) => (
-                                    <GridItem key={index}>
-                                        <Card
-                                            minH="180px"
-                                        >
-                                            <CardHeader>
-                                                <Text fontSize="xs">Step {index + 1}</Text>
-                                                <Text fontSize="sm" textColor="teal.400" fontWeight="semibold">{data.title}</Text>
-                                            </CardHeader>
-                                            <CardBody fontSize="xs" textColor="gray.600">
-                                                <Text>{data.desc}</Text>
-                                            </CardBody>
-                                        </Card>
-                                    </GridItem>
-                                ))
-                            }
-                        </Grid>
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
+            <Reveal width="100%">
+                <Text
+                    textAlign="center"
+                    fontSize={{ base: "large", md: "x-large" }}
+                    fontWeight="bold"
+                >
+                    How it Works
+                </Text>
+            </Reveal>
+            <Reveal width="100%">
+                <Tabs variant='enclosed-colored' colorScheme="teal" p={2}>
+                    <TabList w="100%" justifyContent="center" gap={4}>
+                        <Tab>Seeker</Tab>
+                        <Tab>Recruiter</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            <Grid
+                                templateColumns={{
+                                    base: "repeat(1, 1fr)",
+                                    md: "repeat(4, 1fr)",
+                                }}
+                                gap={4}
+                            >
+                                {
+                                    seeker.map((data, index) => (
+                                        <GridItem key={index}>
+                                            <Card
+                                                minH="180px"
+                                            >
+                                                <CardHeader>
+                                                    <Text fontSize="xs">Step {index + 1}</Text>
+                                                    <Text fontSize="sm" textColor="teal.400" fontWeight="semibold">{data.title}</Text>
+                                                </CardHeader>
+                                                <CardBody fontSize="xs" textColor="gray.600">
+                                                    <Text>{data.desc}</Text>
+                                                </CardBody>
+                                            </Card>
+                                        </GridItem>
+                                    ))
+                                }
+                            </Grid>
+                        </TabPanel>
+                        <TabPanel>
+                            <Grid
+                                templateColumns={{
+                                    base: "repeat(1, 1fr)",
+                                    md: "repeat(4, 1fr)",
+                                }}
+                                gap={4}
+                            >
+                                {
+                                    recruiter.map((data, index) => (
+                                        <GridItem key={index}>
+                                            <Card
+                                                minH="180px"
+                                            >
+                                                <CardHeader>
+                                                    <Text fontSize="xs">Step {index + 1}</Text>
+                                                    <Text fontSize="sm" textColor="teal.400" fontWeight="semibold">{data.title}</Text>
+                                                </CardHeader>
+                                                <CardBody fontSize="xs" textColor="gray.600">
+                                                    <Text>{data.desc}</Text>
+                                                </CardBody>
+                                            </Card>
+                                        </GridItem>
+                                    ))
+                                }
+                            </Grid>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
+            </Reveal>
+
         </>
     )
 }

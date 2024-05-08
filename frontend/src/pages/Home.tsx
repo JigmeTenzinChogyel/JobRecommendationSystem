@@ -3,6 +3,7 @@ import {
 } from "@chakra-ui/react";
 import { Working } from "../components/home/Working";
 import { Stats } from "../components/home/Stats";
+import { TestimonialContnet } from "../components/home/TestimonialContent";
 
 function Home() {
   return (
@@ -16,6 +17,7 @@ function Home() {
       >
         <Stats />
         <Working />
+        <TestimonialContnet/>
       </Flex>
     </>
   );

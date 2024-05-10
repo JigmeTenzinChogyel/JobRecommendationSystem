@@ -22,7 +22,7 @@ function RandomJobs() {
                 >
                     {jobs.map((job, index) => (
                         <GridItem key={index}>
-                            <JobCard job={job} bookmark={false}/>
+                            <JobCard job={job} />
                         </GridItem>
                     ))}
                 </Grid>

@@ -20,7 +20,7 @@ function Hero({ imageUrl, heading, subHeading }: Props) {
     if (pathname === "/") {
         return (
             <Flex
-                minH={pathname === "/" ? "65vh" : "19vh"}
+                minH={pathname === "/" ? "65vh" : "24vh"}
                 backgroundImage={`url('${imageUrl}')`}
                 backgroundSize="cover"
                 backgroundPosition="center"

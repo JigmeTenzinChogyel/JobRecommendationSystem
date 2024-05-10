@@ -10,7 +10,7 @@ export const useJob = (id: number) => {
 
     useEffect(() => {
         fetch();
-    }, [])
+    }, [id])
 
     const fetch = async () => {
         try {

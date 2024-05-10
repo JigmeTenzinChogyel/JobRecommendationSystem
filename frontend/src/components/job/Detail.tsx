@@ -9,7 +9,6 @@ import {
   Divider,
   Tag,
   TagLabel,
-  AbsoluteCenter,
   Link,
 } from '@chakra-ui/react';
 import { FaMoneyBillWave } from 'react-icons/fa';
@@ -24,6 +23,7 @@ import { ResumeRecommendation } from '../resume/ResumeRecommendation';
 import { useApplicationByJob, useApplicationCreate, useApplicationDelete, useApplications } from '../../hooks/applications';
 import Applicants from '../UserAvatar/Applicants';
 import SimilarJobs from './SimilarJobs';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   job: JobResponse;
@@ -37,6 +37,7 @@ const Detail = ({ job }: Props) => {
   const { createApplication } = useApplicationCreate()
   const { deleteApplication } = useApplicationDelete()
   const { user } = useAuth()
+  const navigate = useNavigate();
 
   const handleApply = async () => {
     if (application) {
@@ -52,9 +53,20 @@ const Detail = ({ job }: Props) => {
     <Flex w="80%" my="2%" direction="column">
       <Flex direction={{ base: 'column', md: 'row' }} justify="space-between">
         <Box flex="2.5" pr={{ base: 0, md: 8 }}>
-          <Heading as="h2" size="lg" mb={4} color="teal.600">
-            {job.title}
-          </Heading>
+          <Flex justify="space-between" align="center">
+            <Heading as="h2" size="lg" mb={4} color="teal.600">
+              {job.title}
+            </Heading>
+            {
+              user?.user_role === "recruiter"
+              &&
+              <Button
+                variant="outline"
+                colorScheme='teal'
+                onClick={() => navigate(`/job/update/${job.id}`)}
+              >Update</Button>
+            }
+          </Flex>
           <Flex justify="space-between" align="center" mb={6}>
             <Box>
               <Text fontSize="sm" color="gray.600">
@@ -93,16 +105,33 @@ const Detail = ({ job }: Props) => {
             <Heading as="h4" size="md" mb={4} color="teal.600">
               Description
             </Heading>
-            <Text mb={6} color="gray.700" fontSize="medium">
+            <Box
+              mb={6}
+              color="gray.700"
+              fontSize="medium"
+              whiteSpace="pre-wrap"
+              overflowWrap="anywhere"
+            >
               {job.description}
-            </Text>
+            </Box>
           </Box>
           <Divider my={6} />
           <Stack spacing={6}>
             <Box>
-              <Heading as="h3" size="sm" mb={2} color="teal.600">
-                Experience:
-              </Heading>
+              <Flex justify="space-between" align="center">
+                <Heading as="h3" size="sm" mb={2} color="teal.600">
+                  Experience:
+                </Heading>
+                {
+                  user?.user_role === "recruiter"
+                  &&
+                  <Button
+                    variant="outline"
+                    colorScheme='teal'
+                    onClick={() => navigate(`/job/confirm?id=${job.id}`)}
+                  >Edit</Button>
+                }
+              </Flex>
               <Flex flexWrap="wrap" gap={2}>
                 {job.experience && job.experience.length !== 0
                   ? job.experience.map((exp, index) => (
@@ -149,12 +178,7 @@ const Detail = ({ job }: Props) => {
           <PublicCompanyDetails company={company} isLoading={isLoading} />
         </Box>
       </Flex>
-      <Box position='relative' padding='10'>
-        <Divider />
-        <AbsoluteCenter bg='white' px='4'>
-          END
-        </AbsoluteCenter>
-      </Box>
+      <Divider my={10} />
       {
         user?.user_role === "recruiter" ?
           <>

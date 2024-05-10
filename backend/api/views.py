@@ -75,7 +75,7 @@ class CurrentUserView(generics.RetrieveAPIView):
 class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [ AllowAny ]
 
     def get_object(self):
         user_id = self.kwargs.get('pk')
@@ -334,7 +334,7 @@ class CompanyView(generics.RetrieveAPIView):
 # company from user id
 class CompanyViewByUserId(generics.RetrieveAPIView):
     serializer_class = CompanySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [ AllowAny ]
 
     def get_object(self):
         user_id = self.request.query_params.get('user_id')
@@ -374,7 +374,6 @@ class CompaniesView(generics.ListAPIView):
     def get_queryset(self):
         companies = Company.objects.all()
         return companies
-
 
 # Jobs
 # create job
@@ -480,7 +479,7 @@ class JobDeleteView(generics.DestroyAPIView):
 class JobRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [ AllowAny ]
 
 # get the job user created
 class UserJobListView(generics.ListAPIView):

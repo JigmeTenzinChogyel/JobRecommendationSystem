@@ -20,6 +20,7 @@ import JobPost from "./pages/JobPost";
 import ConfirmResume from "./pages/ConfirmResume";
 import UserResume from "./pages/UserResume";
 import Bookmark from "./pages/Bookmark";
+import JobUpdate from "./pages/JobUpdate";
 
 function App() {
   return (
@@ -34,11 +35,13 @@ function App() {
             <Route path="/employer" element={<Employer />} />
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<FAQComponent />} />
+            <Route path="/job/:id" element={<JobDetail />} />
 
             {/* Protected Route */}
             <Route element={<RequireAuth allowedRoles={[ROLES.RECRUITER]} />}>
               <Route path="/job/post" element={<JobPost />} />
               <Route path="/job/confirm" element={<ConfirmJob />} />
+              <Route path="/job/update/:id" element={<JobUpdate />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER]} />}>
               <Route path="/bookmark" element={<Bookmark />} />
@@ -48,11 +51,9 @@ function App() {
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.SEEKER, ROLES.RECRUITER]} />}>
               <Route path="/profile" element={<Profile />} />
-              <Route path="/job/:id" element={<JobDetail />} />
               <Route path="/user/:id" element={<UserResume />} />
               <Route path="/notification" element={<Notification />} />
             </Route>
-
           </Route>
 
           {/* Public Route */}
